@@ -13,17 +13,36 @@
 /*
   Four tracks, and the brand column takes roughly a third — with five equal
   tracks the last one wrapped to its own row and the footer doubled in height.
-  The 180px floor keeps two columns on tablets before it stacks.
+
+  Between the two extremes the tracks are explicit rather than auto-fit: a 180px
+  floor put three columns on a tablet, so the brand block — the widest of the
+  four by a long way — got squeezed to a third and the last column dropped to a
+  row of its own. Two columns with the brand spanning both is the same footer,
+  legibly.
 */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 28px clamp(24px, 3vw, 48px);
+}
+
+@media (min-width: 560px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .brandCol {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (min-width: 940px) {
   .grid {
     grid-template-columns: 1.5fr repeat(3, minmax(0, 1fr));
+  }
+
+  .brandCol {
+    grid-column: auto;
   }
 }
 
@@ -97,10 +116,17 @@
 .links {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  /* Roomier on touch, where 8px between 14px links is an easy mis-tap. */
+  gap: clamp(8px, 3vw, 13px);
   font-size: 14px;
   line-height: 1.5;
   color: rgba(245, 242, 236, 0.82);
+}
+
+@media (min-width: 940px) {
+  .links {
+    gap: 8px;
+  }
 }
 
 .link {
@@ -122,8 +148,9 @@
 }
 
 .socialLink {
-  width: 32px;
-  height: 32px;
+  /* 32px was under the comfortable tap size on a phone. */
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   border: 1px solid rgba(245, 242, 236, 0.2);
   display: grid;

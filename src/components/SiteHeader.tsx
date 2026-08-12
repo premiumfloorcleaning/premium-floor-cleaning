@@ -71,6 +71,26 @@ export default function SiteHeader() {
               {link.label}
             </Link>
           ))}
+
+          {/*
+            The desktop bar's two actions, repeated here — an open menu covers
+            the sticky bottom bar, so without these the menu is a dead end for
+            anyone who opened it wanting to get in touch.
+          */}
+          <div className={styles.mobileActions}>
+            <a href={site.phone.href} className={styles.mobileCall}>
+              <Phone size={16} />
+              {site.phone.display}
+            </a>
+            <Link
+              href="/#contact"
+              onClick={() => setMenuOpen(false)}
+              className={styles.mobileQuote}
+            >
+              Free quote
+              <ArrowRight size={15} />
+            </Link>
+          </div>
         </nav>
       ) : null}
     </header>

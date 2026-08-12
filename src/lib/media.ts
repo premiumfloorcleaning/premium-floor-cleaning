@@ -79,6 +79,19 @@ export const media = {
     drivewayAfter: image("v1786529691/clean_driveway_pressure_washed.webp"),
   },
 
+  /**
+   * One per service area — the region itself, not a job photo. Every area page
+   * used to open on the same shot of finished floorboards, which told a visitor
+   * nothing about whether the page was actually about their city.
+   */
+  areas: {
+    brisbane: image("v1786543776/Brisbane.png"),
+    goldCoast: image("v1786543775/Gold_Coast.png"),
+    ipswich: image("v1786543775/Ipswich.png"),
+    logan: image("v1786543775/Logan.png"),
+    sunshineCoast: image("v1786543775/sunshine-coast.png"),
+  },
+
   /** Transparent-background cut-out for the mid-page CTA panel. */
   people: {
     cleaningGirl: image("v1786529697/cleaning_girl.png"),
@@ -122,4 +135,10 @@ export const cloudinaryPaths = {
   graffitiRemoval: "v1786530011/graffiti_removal.png",
   glossyHallway: "v1786529696/glossy_hallway_reflection.webp",
   cleanDriveway: "v1786529691/clean_driveway_pressure_washed.webp",
+  /* Region shots, so each area page can build a share card of its own city. */
+  brisbane: "v1786543776/Brisbane.png",
+  goldCoast: "v1786543775/Gold_Coast.png",
+  ipswich: "v1786543775/Ipswich.png",
+  logan: "v1786543775/Logan.png",
+  sunshineCoast: "v1786543775/sunshine-coast.png",
 } as const;

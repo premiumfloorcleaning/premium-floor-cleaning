@@ -176,10 +176,11 @@
   color: #ffffff;
 }
 
-/* Services, scoped to this region. */
+/* Services, scoped to this region. 280px so an iPad in landscape gets three
+   across rather than the same two-up row as portrait — see Services.module.css. */
 .serviceGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: clamp(16px, 2vw, 24px);
   margin-top: clamp(26px, 3vw, 40px);
 }
@@ -212,6 +213,9 @@
 
 .serviceBody {
   padding: 18px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .serviceTitle {
@@ -228,8 +232,28 @@
 .serviceBlurb {
   font-size: 14.5px;
   line-height: 1.6;
-  margin: 8px 0 0;
+  margin: 8px 0 14px;
   color: var(--muted);
+}
+
+/* Same "this card goes somewhere" cue as the home page's service grid. */
+.serviceExplore {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.serviceExploreArrow {
+  color: var(--brass);
+  transition: transform 0.2s ease;
+}
+
+.serviceCard:hover .serviceExploreArrow {
+  transform: translateX(4px);
 }
 
 .footRow {
@@ -318,6 +342,12 @@
 @media (prefers-reduced-motion: reduce) {
   .serviceCard,
   .serviceCard:hover {
+    transform: none;
+  }
+
+  .serviceExploreArrow,
+  .serviceCard:hover .serviceExploreArrow {
+    transition: none;
     transform: none;
   }
 }

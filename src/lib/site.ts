@@ -6,7 +6,7 @@
  * Image and video URLs are not repeated here — they come from lib/media.ts.
  */
 
-import { media } from "./media";
+import { cloudinaryPaths, media } from "./media";
 
 export const site = {
   name: "Premium Floor Cleaning Services",
@@ -108,6 +108,10 @@ export type ServiceArea = {
   intro: string;
   /** What we actually get called out for in this region, in plain terms. */
   local: string[];
+  /** The region itself — a shot of the city, not of a finished job. */
+  image: string;
+  /** Cloudinary path for the same photo, so the page can build its share card. */
+  imagePath: string;
   /**
    * Drives the coverage map. `radiusKm` is how far out we travel from that
    * centre, and the five circles are drawn as one shaded region — so the radii
@@ -129,6 +133,8 @@ export const serviceAreas: ServiceArea[] = [
     name: "Brisbane",
     suburbs: ["West End", "New Farm", "Chermside", "Indooroopilly", "Carindale"],
     note: "Home base",
+    image: media.areas.brisbane,
+    imagePath: cloudinaryPaths.brisbane,
     intro:
       "We are based in West End, so Brisbane is the work we do most and the work we get to fastest. Inner-city Queenslanders come with original hardwood that has been sanded thin, and the apartment towers along the river are almost all tile and grout. Both need a different approach to a suburban carpet clean, and we carry the gear for all three in the one van.",
     local: [
@@ -143,6 +149,8 @@ export const serviceAreas: ServiceArea[] = [
     slug: "gold-coast",
     name: "Gold Coast",
     suburbs: ["Southport", "Surfers Paradise", "Broadbeach", "Robina", "Coomera"],
+    image: media.areas.goldCoast,
+    imagePath: cloudinaryPaths.goldCoast,
     intro:
       "Salt air is the difference on the Gold Coast. Balcony tiles, glass balustrades and pool surrounds pick up a salt film that ordinary cleaning smears rather than removes, and holiday lets need turning around between guests rather than on a leisurely weekday. We work weekends here as a matter of course.",
     local: [
@@ -157,6 +165,8 @@ export const serviceAreas: ServiceArea[] = [
     slug: "ipswich",
     name: "Ipswich",
     suburbs: ["Springfield Lakes", "Ripley", "Booval", "Goodna", "Karalee"],
+    image: media.areas.ipswich,
+    imagePath: cloudinaryPaths.ipswich,
     intro:
       "Ipswich blocks are bigger, which means more concrete: driveways, paths, sheds and patios that have gone black with mould and lichen. Older homes around Booval and Goodna often have decades of build-up in the grout and lino that has never been machine scrubbed. Newer estates out at Ripley and Springfield Lakes are mostly tile and light-coloured grout, which shows every mark.",
     local: [
@@ -170,6 +180,8 @@ export const serviceAreas: ServiceArea[] = [
     slug: "logan",
     name: "Logan",
     suburbs: ["Springwood", "Shailer Park", "Browns Plains", "Beenleigh", "Marsden"],
+    image: media.areas.logan,
+    imagePath: cloudinaryPaths.logan,
     intro:
       "Logan is family homes and a lot of rentals, so most of what we do here is carpet: pet stains, traffic lanes through the middle of the house, and end-of-lease cleans where the agent has a checklist and a deadline. We give you the written record of the clean, which is usually what the property manager actually wants.",
     local: [
@@ -183,6 +195,8 @@ export const serviceAreas: ServiceArea[] = [
     slug: "sunshine-coast",
     name: "Sunshine Coast",
     suburbs: ["Maroochydore", "Mooloolaba", "Caloundra", "Noosa", "Buderim"],
+    image: media.areas.sunshineCoast,
+    imagePath: cloudinaryPaths.sunshineCoast,
     intro:
       "Sand is the constant on the Sunshine Coast. It works into carpet backing and grout lines where a vacuum will never reach it, and it scratches timber and tile if it is left to sit. Add holiday homes that sit empty and then get used hard for a fortnight, and most jobs up here are either a deep reset or a turnaround between stays.",
     local: [
@@ -230,6 +244,15 @@ export type Service = {
   body: string[];
   /** What the job actually includes — rendered as a checklist. */
   includes: string[];
+  /**
+   * The same job in order, start to finish.
+   *
+   * `includes` answers "what do I get"; this answers "what happens on the day",
+   * which is the question most people are actually asking when they ring up. It
+   * is the one thing a quote cannot show them in advance, so it belongs on the
+   * page — five short steps, no jargon, no upsell.
+   */
+  process: { title: string; body: string }[];
   /** Terms real people type. Drives the on-page copy, not a meta keywords tag. */
   alsoKnownAs: string[];
 };
@@ -258,6 +281,28 @@ export const services: Service[] = [
       "Oil and grease spots pre-treated separately",
       "Edges and corners done by hand where the machine cannot reach",
       "Walk-through with you before we pack up",
+    ],
+    process: [
+      {
+        title: "We come and look",
+        body: "We check the floor and tell you what will and won’t come out.",
+      },
+      {
+        title: "Small test patch",
+        body: "We clean a hidden corner first, so you can see the result.",
+      },
+      {
+        title: "Area protected",
+        body: "Loose items moved, skirtings and drains covered before we start.",
+      },
+      {
+        title: "Machine scrub",
+        body: "A heavy rotary machine does the work — not a mop.",
+      },
+      {
+        title: "Dirty water out",
+        body: "We vacuum it up, then walk the floor with you.",
+      },
     ],
     alsoKnownAs: [
       "concrete cleaning",
@@ -290,6 +335,28 @@ export const services: Service[] = [
       "Optional penetrating sealer, quoted separately",
       "Skirtings and cabinet kicks protected before we start",
     ],
+    process: [
+      {
+        title: "We check the grout",
+        body: "We tell you whether it needs cleaning or replacing.",
+      },
+      {
+        title: "Area protected",
+        body: "Skirtings and doorways covered before anything gets wet.",
+      },
+      {
+        title: "Cleaner goes on",
+        body: "Mould, soap scum and grease get time to soften first.",
+      },
+      {
+        title: "Hot water, high pressure",
+        body: "The tool cleans each grout line and sucks the dirty water up.",
+      },
+      {
+        title: "Sealed and checked",
+        body: "Sealer if you want it, then we walk the floor with you.",
+      },
+    ],
     alsoKnownAs: [
       "grout cleaning",
       "bathroom tile cleaning",
@@ -321,6 +388,28 @@ export const services: Service[] = [
       "Deodorising and anti-microbial treatment where it is needed",
       "Furniture moved and protected, blocks under legs while it dries",
       "Before-and-after photos, and a written record for end-of-lease",
+    ],
+    process: [
+      {
+        title: "We look at the carpet",
+        body: "We point out anything that might not come out.",
+      },
+      {
+        title: "Furniture moved",
+        body: "We shift what we safely can and put blocks under the legs.",
+      },
+      {
+        title: "Pre-spray",
+        body: "Cleaner goes on and we work it down into the pile.",
+      },
+      {
+        title: "Steam and extract",
+        body: "Hot water in, dirt out. Dry in about 4–8 hours.",
+      },
+      {
+        title: "Stains and photos",
+        body: "Spots treated, plus before-and-after photos if you need them.",
+      },
     ],
     alsoKnownAs: [
       "steam cleaning",
@@ -355,6 +444,28 @@ export const services: Service[] = [
       "Paver joints re-sanded where washing has opened them up",
       "Optional sealing on driveways and patios, quoted separately",
     ],
+    process: [
+      {
+        title: "We check the surface",
+        body: "Concrete, pavers and sandstone each need a different pressure.",
+      },
+      {
+        title: "Mould treated",
+        body: "We kill it first, so it doesn’t grow straight back.",
+      },
+      {
+        title: "Area protected",
+        body: "Garden beds, gutters and downpipes covered before we start.",
+      },
+      {
+        title: "Even machine wash",
+        body: "A rotary cleaner gives one even finish, with no stripes.",
+      },
+      {
+        title: "Edges and joints",
+        body: "Corners done by hand, and paver joints re-sanded.",
+      },
+    ],
     alsoKnownAs: [
       "driveway cleaning",
       "high pressure cleaning",
@@ -388,6 +499,28 @@ export const services: Service[] = [
       "Water-fed pole for upper storeys, no ladders against your render",
       "Salt film and hard-water staining assessed and reported honestly",
     ],
+    process: [
+      {
+        title: "We count the glass",
+        body: "We agree what’s included, inside and out.",
+      },
+      {
+        title: "Screens off",
+        body: "Washed separately, so they can’t dirty the glass again.",
+      },
+      {
+        title: "Frames and tracks",
+        body: "Done first, or the next rain washes them over the glass.",
+      },
+      {
+        title: "Glass washed",
+        body: "Purified water and a squeegee. Poles upstairs, no ladders.",
+      },
+      {
+        title: "Screens back on",
+        body: "We check every pane in the light before we leave.",
+      },
+    ],
     alsoKnownAs: [
       "window washing",
       "glass cleaning",
@@ -419,6 +552,28 @@ export const services: Service[] = [
       "Test patch on anything we have not seen before",
       "Anti-graffiti sacrificial coating, quoted as an option",
       "Photo record for insurance, council or body corporate reporting",
+    ],
+    process: [
+      {
+        title: "We check the surface",
+        body: "Brick, render and roller doors each need a different method.",
+      },
+      {
+        title: "Test patch",
+        body: "Tried out of sight first, before we touch the tag.",
+      },
+      {
+        title: "Paint lifted",
+        body: "Gel on sealed surfaces, a poultice to draw it out of brick.",
+      },
+      {
+        title: "Rinsed and checked",
+        body: "A second pass on anything the first one left behind.",
+      },
+      {
+        title: "Photos and coating",
+        body: "Photos for your records, plus a coating if it keeps happening.",
+      },
     ],
     alsoKnownAs: [
       "tag removal",

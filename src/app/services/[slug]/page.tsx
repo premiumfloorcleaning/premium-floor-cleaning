@@ -186,6 +186,31 @@ export default async function ServicePage({
           </div>
         </section>
 
+        {/*
+          What actually happens on the day, in five steps. The checklist above
+          says what you get; this says the order it happens in, which is the part
+          a quote cannot show anyone in advance. Deliberately plain — a customer
+          reading this is deciding whether to call, not comparing methods.
+        */}
+        <section className="container section">
+          <span className="eyebrow">How the job runs</span>
+          <h2 className={`sectionTitle ${styles.processHead}`}>
+            What happens on the day
+          </h2>
+          <p className={styles.processNote}>
+            Five steps, start to finish. Same either way — home or commercial.
+          </p>
+
+          <ol className={styles.processGrid}>
+            {service.process.map((step) => (
+              <li key={step.title} className={styles.processStep}>
+                <h3 className={styles.processStepTitle}>{step.title}</h3>
+                <p className={styles.processStepBody}>{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
         <section className="container section">
           <h2 className="sectionTitle">Other services</h2>
           <div className={styles.grid}>

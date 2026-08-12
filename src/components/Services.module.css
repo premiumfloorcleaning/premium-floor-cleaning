@@ -17,9 +17,15 @@
   max-width: 38ch;
 }
 
+/*
+  290px rather than 320px: at 320 the six cards stayed two-up until ~1090px, so
+  an iPad in landscape got the same layout as one in portrait, with 460px-wide
+  cards. 290 turns that into a three-up row from about 995px — still two-up on
+  tablet portrait, where three would be too narrow for the 16:11 photo to read.
+*/
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
   gap: clamp(16px, 2vw, 26px);
   margin-top: clamp(32px, 4vw, 56px);
 }
@@ -72,6 +78,7 @@
 
 .explore {
   margin-top: auto;
+  padding-top: 4px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -82,11 +89,24 @@
 
 .exploreArrow {
   color: var(--brass);
+  transition: transform 0.2s ease;
+}
+
+/* The card lifts on hover; the arrow moving with it is the second cue that this
+   goes somewhere. Touch devices get neither, which is why the row has a label. */
+.card:hover .exploreArrow {
+  transform: translateX(4px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .card,
   .card:hover {
+    transform: none;
+  }
+
+  .exploreArrow,
+  .card:hover .exploreArrow {
+    transition: none;
     transform: none;
   }
 }

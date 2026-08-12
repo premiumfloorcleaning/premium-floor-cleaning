@@ -2,6 +2,12 @@
   padding: clamp(72px, 10vw, 140px) var(--pad-x-wide) 0;
 }
 
+/*
+  Explicit breakpoint rather than auto-fit. auto-fit split this into two columns
+  from about 700px, which left the headline — 24 words of it — in a 280px track
+  running nine lines deep, with the two actions wrapping underneath. It needs a
+  real tablet's width before the photo can sit beside the copy.
+*/
 .panel {
   position: relative;
   max-width: var(--maxw-wide);
@@ -9,9 +15,15 @@
   background: var(--ink);
   border-radius: clamp(18px, 2.4vw, 32px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(8px, 2vw, 32px);
   align-items: end;
+}
+
+@media (min-width: 940px) {
+  .panel {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
 }
 
 .body {
@@ -51,7 +63,9 @@
   font-size: 15px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 17px 30px;
+  /* Uppercase and letter-spaced, so this label is wide: it needs the horizontal
+     padding to give way before it hits the panel edge on a small phone. */
+  padding: 17px clamp(20px, 6vw, 30px);
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
@@ -81,12 +95,25 @@
   color: var(--brass);
 }
 
-/* The cut-out is meant to break out over the panel's top edge. */
+/*
+  The cut-out is meant to break out over the panel's top edge — but only in the
+  two-column layout, where "up and out of the panel" is empty space. Once the
+  panel stacks, the row above the cut-out is the copy and the buttons, so the
+  same negative margin pulls the photo straight over the "Book your clean now"
+  action instead. Stacked, it just sits below.
+*/
 .cutout {
   position: relative;
   align-self: stretch;
-  margin-top: clamp(-112px, -7.5vw, -56px);
-  min-height: clamp(320px, 34vw, 460px);
+  margin-top: 0;
+  min-height: clamp(230px, 52vw, 340px);
   display: flex;
   align-items: flex-end;
+}
+
+@media (min-width: 940px) {
+  .cutout {
+    margin-top: clamp(-112px, -7.5vw, -56px);
+    min-height: clamp(320px, 34vw, 460px);
+  }
 }

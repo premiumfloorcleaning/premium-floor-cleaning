@@ -1,6 +1,6 @@
-/* Keeps the footer clear of the fixed mobile bar. */
+/* Keeps the footer clear of the fixed mobile bar, home indicator included. */
 .spacer {
-  height: 82px;
+  height: calc(82px + var(--safe-b));
 }
 
 .bar {
@@ -13,10 +13,23 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--line);
-  padding: 10px 12px;
+  /*
+    The extra bottom padding is the iOS home-indicator inset. Without it the
+    three pills sit underneath the indicator, where taps are swallowed.
+  */
+  padding: 10px clamp(8px, 3vw, 12px) calc(10px + var(--safe-b));
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(6px, 2vw, 8px);
+}
+
+/* Three full-width pills on a tablet are absurdly long — cap and centre them. */
+@media (min-width: 560px) {
+  .bar {
+    grid-template-columns: repeat(3, minmax(0, 200px));
+    justify-content: center;
+    gap: 12px;
+  }
 }
 
 .barCall,
@@ -28,9 +41,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  /* "WhatsApp" plus its icon did not fit a third of a 320px screen at 15px. */
+  gap: clamp(5px, 1.6vw, 8px);
   font-weight: 600;
-  font-size: 15px;
+  font-size: clamp(13px, 3.6vw, 15px);
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .barCall {
@@ -63,7 +79,9 @@
   display: none;
 }
 
-@media (min-width: 940px) {
+/* Matches the header's nav breakpoint: the bar has to survive as long as the
+   header is showing a hamburger, or a tablet has no visible call/quote action. */
+@media (min-width: 1024px) {
   .spacer,
   .bar {
     display: none;

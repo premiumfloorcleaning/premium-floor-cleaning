@@ -28,7 +28,13 @@
   box-shadow: var(--shadow-lg);
   background: var(--ink);
   aspect-ratio: 4 / 3;
-  touch-action: none;
+  /*
+    pan-y, not none. The range input covers the whole viewer, so `none` meant a
+    finger that landed anywhere on the image could not scroll the page — the
+    slider became a scroll trap taking up most of a phone screen. Horizontal
+    drags still go to the input; vertical ones scroll.
+  */
+  touch-action: pan-y;
 }
 
 .layer {

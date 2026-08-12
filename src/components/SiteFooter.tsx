@@ -19,7 +19,7 @@ export default function SiteFooter() {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.grid}>
-          <div>
+          <div className={styles.brandCol}>
             <div className={styles.brand}>
               <Image
                 src={media.brand.logoBadge}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ImageSlot from "./ImageSlot";
+import { ArrowRight } from "./Icons";
 import { services } from "@/lib/site";
 import styles from "./Services.module.css";
 
@@ -35,6 +36,16 @@ export default function Services() {
             <div className={styles.body}>
               <h3 className={styles.cardTitle}>{service.title}</h3>
               <p className={styles.cardBlurb}>{service.blurb}</p>
+              {/*
+                The whole card is a link to the service's own page, but nothing
+                on it said so — the styles for this row already existed and were
+                never rendered. `margin-top: auto` pins it to the bottom, so the
+                row lines up across cards whose blurbs are different lengths.
+              */}
+              <span className={styles.explore}>
+                See the full process
+                <ArrowRight size={15} className={styles.exploreArrow} />
+              </span>
             </div>
           </Link>
         ))}

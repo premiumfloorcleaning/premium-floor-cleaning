@@ -23,8 +23,18 @@ const body = Manrope({
   display: "swap",
 });
 
+/*
+  Brand first. The old title opened with "Cleaning Services Brisbane, …", which
+  reads well in a search result but leaves a browser tab — and the Google result's
+  own site name — showing a generic phrase with no clue whose business it is.
+  The region keywords still follow it, so nothing is lost from the snippet.
+
+  The favicon that sits next to this comes from src/app/icon.png (and
+  apple-icon.png), which is the Next.js file convention. Without those the host's
+  own default icon is served, which is where the Vercel mark was coming from.
+*/
 const TITLE =
-  "Cleaning Services Brisbane, Gold Coast, Ipswich, Logan & Sunshine Coast";
+  "Premium Floor Cleaning Services | Brisbane, Gold Coast & SE QLD";
 const DESCRIPTION = `Carpet, tile and grout, floor scrubbing, pressure washing, window cleaning and graffiti removal across ${serviceAreaSentence}. Free on-site quote, fixed price before we start. Open 7 days, 7am–9pm.`;
 
 export const metadata: Metadata = {

@@ -25,7 +25,7 @@ import { serviceAreaSentence } from "@/lib/site";
 const structuredData = graph([
   webPageNode({
     path: "/",
-    name: "Cleaning Services Brisbane, Gold Coast, Ipswich, Logan & Sunshine Coast",
+    name: "Premium Floor Cleaning Services | Brisbane, Gold Coast & SE QLD",
     description: `Carpet, tile and grout, floor scrubbing, pressure washing, window cleaning and graffiti removal across ${serviceAreaSentence}.`,
   }),
   faqNode,

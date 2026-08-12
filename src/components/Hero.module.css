@@ -7,7 +7,13 @@
   border-radius: clamp(18px, 2.4vw, 32px);
   overflow: hidden;
   background: var(--ink);
-  min-height: clamp(560px, 84vh, 860px);
+  min-height: clamp(520px, 84vh, 860px);
+  /*
+    svh is the viewport with the mobile browser chrome *showing*. With plain vh,
+    iOS measures the toolbar-hidden height, so the bottom of the stage — the CTAs
+    and the trust card — starts underneath the address bar.
+  */
+  min-height: clamp(520px, 84svh, 860px);
   display: flex;
   align-items: flex-end;
 }
@@ -84,7 +90,15 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 30px;
+  margin-top: clamp(22px, 4vw, 30px);
+}
+
+/* Two half-width buttons on a narrow phone are cramped and unequal; full-width
+   stacked pills read as the primary action they are. */
+@media (max-width: 439px) {
+  .ctas > * {
+    width: 100%;
+  }
 }
 
 .trustCard {
@@ -96,10 +110,30 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(245, 242, 236, 0.2);
   border-radius: var(--r);
-  padding: 22px 24px;
+  padding: clamp(17px, 4.5vw, 22px) clamp(17px, 5vw, 24px);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: clamp(13px, 3vw, 16px);
+}
+
+/*
+  The card only sits beside the copy once the hero grid has two tracks (~940px).
+  Stacked below that, `justify-self: end` leaves it hugging the right edge with
+  dead space beside it, so let it fill the width instead.
+*/
+@media (max-width: 939px) {
+  .trustCard {
+    justify-self: stretch;
+    max-width: none;
+  }
+}
+
+/* Stretched across a whole tablet the card is mostly empty space, so cap it —
+   left-aligned under the copy rather than a 700px band of glass. */
+@media (min-width: 620px) and (max-width: 939px) {
+  .trustCard {
+    max-width: 520px;
+  }
 }
 
 .trustRow {
@@ -141,25 +175,29 @@
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: clamp(12px, 3vw, 16px);
 }
 
+/* "Under 10 min" is the widest value here, and at a fixed 28px it ran past its
+   half of the card on a 320–375px phone. */
 .statValue {
   font-family: var(--display);
   font-weight: 600;
-  font-size: 28px;
-  line-height: 1;
+  font-size: clamp(21px, 6vw, 28px);
+  line-height: 1.05;
   color: var(--bone);
   margin: 0;
 }
 
 .statUnit {
-  font-size: 15px;
+  font-size: clamp(13px, 3.4vw, 15px);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .statLabel {
   font-size: 12.5px;
+  line-height: 1.35;
   color: rgba(245, 242, 236, 0.7);
   margin: 6px 0 0;
 }

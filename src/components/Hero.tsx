@@ -77,10 +77,14 @@ export default function Hero() {
                 height={304}
                 className={styles.trustBadge}
               />
+              {/*
+                No hard <br /> here: the card is 380px wide on desktop but full
+                width on a phone and a third of a row on a tablet, so a fixed
+                break lands in the wrong place at two of the three sizes.
+              */}
               <span className={styles.trustText}>
-                Servicing Brisbane, Gold Coast,
-                <br />
-                Ipswich, Logan &amp; Sunshine Coast
+                Servicing Brisbane, Gold Coast, Ipswich, Logan &amp; Sunshine
+                Coast
               </span>
             </div>
 

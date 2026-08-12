@@ -188,6 +188,100 @@
   box-shadow: var(--shadow-lg);
 }
 
+/* Process — the job in order, one card per step. ------------------- */
+
+.processHead {
+  max-width: 30ch;
+}
+
+.processNote {
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 14px 0 0;
+  max-width: 56ch;
+  color: var(--muted);
+}
+
+/*
+  Explicit tracks rather than auto-fit. Five steps in an auto-fit grid land as
+  3 + 2 or 4 + 1 depending on the width, and neither reads as a sequence. Two
+  columns on a tablet and three on a desktop both do, and the numbers carry the
+  order regardless.
+*/
+.processGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(12px, 1.8vw, 18px);
+  counter-reset: step;
+  margin-top: clamp(26px, 3.4vw, 40px);
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 620px) {
+  .processGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .processGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.processStep {
+  counter-increment: step;
+  background: var(--paper);
+  border-radius: var(--r);
+  padding: clamp(20px, 3vw, 26px);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* The number is generated, so the order can never drift out of step with the
+   list — reordering the data reorders the labels. */
+.processStep::before {
+  content: counter(step, decimal-leading-zero);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--bronze);
+}
+
+.processStepTitle {
+  font-size: clamp(18px, 2vw, 20px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.processStepBody {
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+  color: var(--muted);
+}
+
+/* The last step is where the customer signs the job off, so it closes the set. */
+.processStep:last-child {
+  background: var(--ink);
+}
+
+.processStep:last-child::before {
+  color: var(--brass);
+}
+
+.processStep:last-child .processStepTitle {
+  color: var(--bone);
+}
+
+.processStep:last-child .processStepBody {
+  color: rgba(245, 242, 236, 0.72);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));

@@ -33,10 +33,12 @@
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 24px 28px;
-  margin-top: 36px;
-  padding-top: 30px;
+  /* min(100%, …) so a single stat can still take the full width rather than
+     forcing the track wider than the panel on the narrowest phones. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 118px), 1fr));
+  gap: 22px clamp(16px, 2.8vw, 28px);
+  margin-top: clamp(28px, 4vw, 36px);
+  padding-top: clamp(24px, 3.4vw, 30px);
   border-top: 1px solid rgba(245, 242, 236, 0.18);
 }
 
@@ -68,17 +70,22 @@
   background: #0a2036;
 }
 
+/*
+  Was a hard `1fr 1fr`. Inside the panel's own padding that left each note about
+  75px of text on a 320px phone — "Green products" broke a word per line. They
+  stack instead until there is room for two.
+*/
 .notes {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(14px, 2vw, 20px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: clamp(12px, 2vw, 20px);
 }
 
 .note {
   background: rgba(245, 242, 236, 0.07);
   border: 1px solid rgba(245, 242, 236, 0.14);
   border-radius: var(--r);
-  padding: 20px 22px;
+  padding: clamp(16px, 4vw, 20px) clamp(16px, 4.5vw, 22px);
 }
 
 .noteTitle {

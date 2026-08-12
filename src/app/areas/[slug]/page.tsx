@@ -7,7 +7,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import StickyActions from "@/components/StickyActions";
 import { ArrowRight, Check, Clock, Phone, WhatsApp } from "@/components/Icons";
-import { SOCIAL_CARD_SIZE, cloudinaryPaths, media, socialCard } from "@/lib/media";
+import { SOCIAL_CARD_SIZE, socialCard } from "@/lib/media";
 import {
   BUSINESS_ID,
   absolute,
@@ -51,7 +51,9 @@ export async function generateMetadata({
 
   const title = `Cleaning Services ${area.name} | Carpet, Tile, Pressure Washing & Windows`;
   const description = `Professional carpet, tile and grout, floor scrubbing, pressure washing, window cleaning and graffiti removal across ${area.name} — ${area.suburbs.slice(0, 3).join(", ")} and surrounding suburbs. Free on-site quote, fixed price, open 7 days.`;
-  const card = socialCard(cloudinaryPaths.social);
+  // The region's own photo, so a shared link previews that city rather than the
+  // same floorboards for all five.
+  const card = socialCard(area.imagePath);
 
   return {
     title: { absolute: title },
@@ -176,9 +178,9 @@ export default async function AreaPage({
 
             <div className={styles.media}>
               <ImageSlot
-                src={media.results.floorboardsAfter}
-                alt={`Finished floor cleaning work in ${area.name}`}
-                label={`${area.name} job`}
+                src={area.image}
+                alt={`${area.name}, one of the five South East QLD regions we cover`}
+                label={`${area.name} photo`}
                 priority
                 sizes="(min-width: 940px) 46vw, 100vw"
               />
@@ -241,6 +243,10 @@ export default async function AreaPage({
                     {service.title} <span>{area.name}</span>
                   </h3>
                   <p className={styles.serviceBlurb}>{service.blurb}</p>
+                  <span className={styles.serviceExplore}>
+                    See the full process
+                    <ArrowRight size={14} className={styles.serviceExploreArrow} />
+                  </span>
                 </div>
               </Link>
             ))}

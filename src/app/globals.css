@@ -30,6 +30,19 @@
   --pad-x: clamp(16px, 4vw, 48px);
   --pad-x-wide: clamp(12px, 2.5vw, 24px);
   --section-y: clamp(56px, 8vw, 112px);
+
+  /*
+    Height of the sticky header, kept as a formula rather than a set of
+    breakpoints so it cannot drift: the bar is its 13px of padding top and bottom
+    plus the logo badge, and the badge is the tallest thing in it at every width.
+    Anchor links (#services, #contact, …) need this — see scroll-padding-top
+    below — and so does the mobile menu's max-height.
+  */
+  --badge-h: clamp(44px, 11vw, 54px);
+  --header-h: calc(26px + var(--badge-h));
+
+  /* Home-indicator inset on iOS. 0 everywhere else. */
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
 
 *,
@@ -40,6 +53,12 @@
 
 html {
   scroll-behavior: smooth;
+  /*
+    Keeps every in-page anchor clear of the sticky header. Without it the target
+    section's eyebrow and title sit behind the bar, which is worst on phones
+    where the header is proportionally tallest.
+  */
+  scroll-padding-top: calc(var(--header-h) + 12px);
 }
 
 body {

@@ -119,7 +119,7 @@ export default function CoverageMap() {
           {tiles.map((tile) => (
             /*
               Plain <img>, not next/image: these are already 256px PNGs served
-              from a CDN, so putting 15 of them through the optimiser costs build
+              from a CDN, so putting 15 of them through the optimizer costs build
               time and cache space for no gain.
             */
             // eslint-disable-next-line @next/next/no-img-element
