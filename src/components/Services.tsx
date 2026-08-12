@@ -1,0 +1,45 @@
+import Link from "next/link";
+import ImageSlot from "./ImageSlot";
+import { ArrowRight } from "./Icons";
+import { services } from "@/lib/site";
+import styles from "./Services.module.css";
+
+export default function Services() {
+  return (
+    <section id="services" className="container section">
+      <div className={styles.head}>
+        <div>
+          <span className="eyebrow">Our services</span>
+          <h2 className={styles.title}>Six ways we make a property feel new</h2>
+        </div>
+        <p className={`lede ${styles.headNote}`}>
+          Not sure what you need? Send a photo on WhatsApp and we’ll tell you the
+          right fix — no pressure, no jargon.
+        </p>
+      </div>
+
+      <div className={styles.grid}>
+        {services.map((service) => (
+          <Link
+            key={service.slug}
+            href={`/services/${service.slug}`}
+            className={styles.card}
+          >
+            <div className={styles.media}>
+              <ImageSlot
+                src={service.image}
+                alt={service.title}
+                label={service.imageLabel}
+                sizes="(min-width: 940px) 33vw, 100vw"
+              />
+            </div>
+            <div className={styles.body}>
+              <h3 className={styles.cardTitle}>{service.title}</h3>
+              <p className={styles.cardBlurb}>{service.blurb}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}

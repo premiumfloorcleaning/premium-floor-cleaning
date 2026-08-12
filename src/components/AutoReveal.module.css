@@ -1,0 +1,69 @@
+/*
+ * One 7s cycle: hold on the after shot, sweep the before shot across, hold, then
+ * sweep back. `.before` and `.divider` share the duration and timing function,
+ * so the clip edge and the line stay locked together.
+ *
+ * Percentages are the clip inset from the right, so a bigger number means less
+ * of the before shot is visible.
+ */
+
+.before {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 92% 0 0);
+  animation: autoSweep 7s ease-in-out infinite;
+}
+
+.divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 8%;
+  width: 2px;
+  background: var(--bone);
+  box-shadow: 0 0 10px rgba(6, 23, 41, 0.45);
+  pointer-events: none;
+  animation: autoSweepLine 7s ease-in-out infinite;
+}
+
+@keyframes autoSweep {
+  0%,
+  12% {
+    clip-path: inset(0 92% 0 0);
+  }
+  46%,
+  62% {
+    clip-path: inset(0 4% 0 0);
+  }
+  96%,
+  100% {
+    clip-path: inset(0 92% 0 0);
+  }
+}
+
+@keyframes autoSweepLine {
+  0%,
+  12% {
+    left: 8%;
+  }
+  46%,
+  62% {
+    left: 96%;
+  }
+  96%,
+  100% {
+    left: 8%;
+  }
+}
+
+/* Settle on the finished result and hold still. */
+@media (prefers-reduced-motion: reduce) {
+  .before {
+    animation: none;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .divider {
+    display: none;
+  }
+}

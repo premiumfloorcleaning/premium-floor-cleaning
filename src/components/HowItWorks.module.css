@@ -1,0 +1,55 @@
+.title {
+  max-width: 22ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  margin-top: clamp(30px, 4vw, 48px);
+}
+
+.card {
+  background: var(--paper);
+  border-radius: var(--r);
+  padding: 28px 26px 30px;
+  box-shadow: var(--shadow);
+}
+
+.cardDark {
+  background: var(--ink);
+}
+
+.number {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--bronze);
+  letter-spacing: 0.06em;
+}
+
+.cardDark .number {
+  color: var(--brass);
+}
+
+.cardTitle {
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-top: 14px;
+}
+
+.cardDark .cardTitle {
+  color: var(--bone);
+}
+
+.cardBody {
+  font-size: 15.5px;
+  line-height: 1.65;
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.cardDark .cardBody {
+  color: rgba(245, 242, 236, 0.72);
+}

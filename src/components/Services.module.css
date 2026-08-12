@@ -1,0 +1,92 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+}
+
+.title {
+  font-size: clamp(32px, 4.4vw, 58px);
+  line-height: 1.02;
+  margin-top: 16px;
+  max-width: 20ch;
+}
+
+.headNote {
+  max-width: 38ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: clamp(16px, 2vw, 26px);
+  margin-top: clamp(32px, 4vw, 56px);
+}
+
+.card {
+  text-decoration: none;
+  color: inherit;
+  background: var(--paper);
+  border-radius: var(--r);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  color: inherit;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.media {
+  aspect-ratio: 16 / 11;
+  position: relative;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--mint);
+}
+
+.body {
+  padding: 20px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cardTitle {
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.cardBlurb {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 10px 0 18px;
+  color: var(--muted);
+}
+
+.explore {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+
+.exploreArrow {
+  color: var(--brass);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card:hover {
+    transform: none;
+  }
+}

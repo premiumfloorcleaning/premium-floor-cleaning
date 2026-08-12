@@ -1,0 +1,151 @@
+.footer {
+  margin-top: var(--section-y);
+  background: var(--ink-2);
+  color: var(--bone);
+  padding: clamp(32px, 3.6vw, 52px) var(--pad-x) 0;
+}
+
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+/*
+  Four tracks, and the brand column takes roughly a third — with five equal
+  tracks the last one wrapped to its own row and the footer doubled in height.
+  The 180px floor keeps two columns on tablets before it stacks.
+*/
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 28px clamp(24px, 3vw, 48px);
+}
+
+@media (min-width: 940px) {
+  .grid {
+    grid-template-columns: 1.5fr repeat(3, minmax(0, 1fr));
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  display: block;
+  width: auto;
+  height: 56px;
+  flex: none;
+}
+
+.brandName {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 15.5px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.about {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 14px 0 0;
+  max-width: 40ch;
+  color: rgba(245, 242, 236, 0.68);
+}
+
+.colTitle {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 0 0 12px;
+}
+
+/* Same label as .colTitle, but inside the brand column rather than above it. */
+.areasLabel {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 18px 0 8px;
+}
+
+.areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  font-size: 14px;
+}
+
+.areaLink {
+  color: rgba(245, 242, 236, 0.82);
+  text-decoration: none;
+}
+
+.areaLink:hover {
+  color: var(--bone);
+}
+
+.areaLink:not(:last-child)::after {
+  content: " ·";
+  color: rgba(245, 242, 236, 0.35);
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(245, 242, 236, 0.82);
+}
+
+.link {
+  color: rgba(245, 242, 236, 0.82);
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--bone);
+}
+
+.breakAll {
+  overflow-wrap: anywhere;
+}
+
+.social {
+  display: flex;
+  gap: 8px;
+}
+
+.socialLink {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 242, 236, 0.2);
+  display: grid;
+  place-items: center;
+  color: var(--bone);
+  transition: background 0.2s ease;
+}
+
+.socialLink:hover {
+  background: rgba(245, 242, 236, 0.1);
+  color: var(--bone);
+}
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: clamp(24px, 2.6vw, 34px);
+  padding: 16px 0 20px;
+  border-top: 1px solid rgba(245, 242, 236, 0.14);
+  font-size: 13px;
+  color: rgba(245, 242, 236, 0.55);
+}

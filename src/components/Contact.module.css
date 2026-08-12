@@ -1,0 +1,585 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px 48px;
+  margin-top: 16px;
+}
+
+.title {
+  font-size: clamp(30px, 4.2vw, 56px);
+  line-height: 1.02;
+  max-width: 20ch;
+}
+
+.headNote {
+  max-width: 34ch;
+}
+
+/*
+  The form is the primary action, so it gets the wider track; the aside is a
+  fixed-ish rail beside it. Below 940px both stack full width.
+*/
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 2.5vw, 32px);
+  margin-top: clamp(30px, 4vw, 48px);
+  align-items: start;
+}
+
+@media (min-width: 940px) {
+  .grid {
+    grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr);
+  }
+}
+
+/* Form ------------------------------------------------------------- */
+
+.formCard {
+  background: var(--paper);
+  border-radius: var(--r);
+  padding: clamp(24px, 3vw, 38px);
+  box-shadow: var(--shadow);
+}
+
+.formHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 22px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--line);
+}
+
+.formHeadIcon {
+  width: 44px;
+  height: 44px;
+}
+
+.formHeadTitle {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.formHeadNote {
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 5px 0 0;
+  color: var(--muted);
+}
+
+.form {
+  display: grid;
+  gap: 22px;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: 18px;
+}
+
+.field {
+  display: block;
+  min-width: 0;
+}
+
+/* Sentence case at a readable size — the old micro-caps label was hard to scan. */
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.required {
+  color: var(--brass);
+  font-weight: 700;
+}
+
+.optional {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.input,
+.textarea {
+  display: block;
+  width: 100%;
+  padding: 15px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--bone);
+  font-family: var(--body);
+  /* 16px keeps iOS from zooming the page on focus. */
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.input {
+  min-height: 54px;
+}
+
+.textarea {
+  min-height: 118px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: rgba(16, 27, 41, 0.42);
+}
+
+.input:hover,
+.textarea:hover {
+  border-color: rgba(16, 27, 41, 0.24);
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--brass);
+  background: var(--paper);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 22%, transparent);
+}
+
+/* Only flag a bad value once the field has been filled in and left. */
+.input:not(:placeholder-shown):invalid {
+  border-color: #c2503f;
+}
+
+.fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.legend {
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+/*
+  Real radios, visually hidden inside the pill — keyboard arrow-keys, screen
+  readers and native form state all work, and the pill is the label.
+*/
+.chip {
+  position: relative;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14.5px;
+  padding: 12px 18px;
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--bone);
+  color: var(--text);
+  border: 1px solid var(--line);
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.chipInput {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.chip:hover {
+  border-color: var(--brass);
+  background: var(--paper);
+}
+
+.chip:has(.chipInput:checked) {
+  background: var(--ink);
+  color: var(--bone);
+  border-color: var(--ink);
+}
+
+.chip:has(.chipInput:focus-visible) {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+/* The free-text field that "Something else" reveals, tied to the chips above. */
+.reveal {
+  margin-top: 16px;
+  padding-left: 16px;
+  border-left: 2px solid var(--brass-lo);
+}
+
+.submit {
+  margin-top: 4px;
+  background: var(--ink);
+  color: var(--bone);
+  border: 0;
+  border-radius: 999px;
+  min-height: 58px;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 17px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: var(--shadow);
+  transition: background 0.2s ease;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--ink-2);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.error {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #a3271a;
+}
+
+.reassurance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  padding-top: 4px;
+}
+
+.reassuranceItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.reassuranceIcon {
+  color: var(--bronze);
+}
+
+.footnote {
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin: 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.inlineLink {
+  font-weight: 600;
+}
+
+/* Success state ---------------------------------------------------- */
+
+.thanks {
+  padding: 8px 0;
+}
+
+.thanksIcon {
+  width: 48px;
+  height: 48px;
+}
+
+.thanksTitle {
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  margin-top: 18px;
+}
+
+.thanksBody {
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+/* Aside ------------------------------------------------------------ */
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.8vw, 18px);
+}
+
+.contactCard {
+  background: var(--ink);
+  color: var(--bone);
+  border-radius: var(--r);
+  padding: clamp(22px, 2.4vw, 28px);
+  box-shadow: var(--shadow-lg);
+}
+
+.contactEyebrow {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+.contactPhone {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(26px, 2.6vw, 32px);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--bone);
+  text-decoration: none;
+}
+
+.contactPhone:hover {
+  color: #ffffff;
+}
+
+.contactPhoneIcon {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(245, 242, 236, 0.12);
+  border: 1px solid rgba(245, 242, 236, 0.2);
+}
+
+.contactStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 0;
+  font-size: 13.5px;
+  color: rgba(245, 242, 236, 0.72);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 999px;
+  background: #7be0a8;
+}
+
+.contactRule {
+  height: 1px;
+  background: rgba(245, 242, 236, 0.14);
+  margin: 20px 0;
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  text-decoration: none;
+  color: var(--bone);
+}
+
+.contactRowIcon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(245, 242, 236, 0.1);
+  transition: background 0.18s ease;
+}
+
+.contactRow:hover {
+  color: var(--bone);
+}
+
+.contactRow:hover .contactRowIcon {
+  background: rgba(245, 242, 236, 0.2);
+}
+
+.contactRowBody {
+  min-width: 0;
+}
+
+.contactRowLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245, 242, 236, 0.55);
+}
+
+.contactRowValue {
+  display: block;
+  margin-top: 3px;
+  font-size: 15px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.contactRowArrow {
+  margin-left: auto;
+  flex: none;
+  color: rgba(245, 242, 236, 0.45);
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.contactRow:hover .contactRowArrow {
+  color: var(--bone);
+  transform: translateX(3px);
+}
+
+.areaBlock {
+  min-width: 0;
+}
+
+.areaTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+/*
+  Local rather than the global .tag/.tagOnDark pair — five of those are too
+  chunky for this rail, and a module class can't reliably out-specify a global.
+*/
+.areaTag {
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: rgba(245, 242, 236, 0.1);
+  border: 1px solid rgba(245, 242, 236, 0.18);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bone);
+}
+
+/* WhatsApp --------------------------------------------------------- */
+
+.whatsapp {
+  text-decoration: none;
+  background: #1fa855;
+  color: #ffffff;
+  border-radius: var(--r);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow);
+  transition: background 0.2s ease;
+}
+
+.whatsapp:hover {
+  background: #178b45;
+  color: #ffffff;
+}
+
+.whatsappTitle {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.whatsappNote {
+  display: block;
+  font-size: 13.5px;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+
+.whatsappArrow {
+  margin-left: auto;
+  flex: none;
+  transition: transform 0.18s ease;
+}
+
+.whatsapp:hover .whatsappArrow {
+  transform: translateX(3px);
+}
+
+/* Map -------------------------------------------------------------- */
+
+.mapCard {
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--paper);
+}
+
+.map {
+  width: 100%;
+  height: clamp(200px, 20vw, 260px);
+  border: 0;
+  display: block;
+  filter: saturate(0.7) contrast(1.02);
+}
+
+.mapFoot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-top: 1px solid var(--line);
+}
+
+.mapAddress {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.mapAddressStrong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.mapLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}

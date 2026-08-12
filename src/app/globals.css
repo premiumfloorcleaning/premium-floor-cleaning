@@ -1,42 +1,262 @@
+/* ------------------------------------------------------------------
+   Design tokens — ported from the Claude Design source
+   "Premium Floor Cleaning Home.dc.html"
+   ------------------------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #0b2340;
+  --ink-2: #061729;
+  --bone: #f5f2ec;
+  --paper: #ffffff;
+  --brass: #1e6fbf;
+  --brass-lo: #cfe2f7;
+  --bronze: color-mix(in srgb, var(--brass) 52%, #041428);
+  --mint: #e4edf7;
+  --text: #101b29;
+  --muted: rgba(16, 27, 41, 0.62);
+  --line: rgba(16, 27, 41, 0.12);
+
+  --display: var(--font-display), "Manrope", system-ui, sans-serif;
+  --body: var(--font-body), system-ui, sans-serif;
+
+  --r: 16px;
+  --r-sm: 10px;
+  --shadow: 0 1px 2px rgba(11, 35, 64, 0.05), 0 12px 30px -12px rgba(11, 35, 64, 0.16);
+  --shadow-lg: 0 2px 4px rgba(11, 35, 64, 0.06), 0 32px 64px -24px rgba(11, 35, 64, 0.3);
+
+  /* layout rhythm */
+  --maxw: 1280px;
+  --maxw-wide: 1400px;
+  --pad-x: clamp(16px, 4vw, 48px);
+  --pad-x-wide: clamp(12px, 2.5vw, 24px);
+  --section-y: clamp(56px, 8vw, 112px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
   margin: 0;
+  background: var(--bone);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  text-wrap: pretty;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: var(--ink);
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+a:hover {
+  color: var(--brass);
+}
+
+img {
+  max-width: 100%;
+}
+
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+::selection {
+  background: var(--brass-lo);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------
+   Shared primitives
+   ------------------------------------------------------------------ */
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-left: var(--pad-x);
+  padding-right: var(--pad-x);
+}
+
+.containerWide {
+  max-width: var(--maxw-wide);
+  margin: 0 auto;
+}
+
+.section {
+  padding-top: var(--section-y);
+}
+
+/* Small uppercase label with a leading rule — used above every section title. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bronze);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--brass);
+  display: block;
+}
+
+.eyebrowOnDark {
+  color: var(--brass);
+}
+
+.sectionTitle {
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1.03;
+  margin-top: 16px;
+}
+
+.lede {
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Buttons ---------------------------------------------------------- */
+
+.btn {
+  font-family: var(--body);
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 16px 26px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btnDark {
+  background: var(--ink);
+  color: var(--bone);
+}
+
+.btnDark:hover {
+  background: var(--ink-2);
+  color: var(--bone);
+}
+
+.btnLight {
+  background: var(--bone);
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
+}
+
+.btnLight:hover {
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.btnGlass {
+  background: rgba(245, 242, 236, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(245, 242, 236, 0.3);
+  color: var(--bone);
+}
+
+.btnGlass:hover {
+  background: rgba(245, 242, 236, 0.2);
+  color: var(--bone);
+}
+
+/* Static mint pill, e.g. "Photographed every job" */
+.tag {
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--mint);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tagOnDark {
+  background: rgba(245, 242, 236, 0.1);
+  border: 1px solid rgba(245, 242, 236, 0.2);
+  color: var(--bone);
+}
+
+.card {
+  background: var(--paper);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+}
+
+/* Circular mint icon chip used in contact rows and the form header */
+.iconDot {
+  border-radius: 999px;
+  background: var(--mint);
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--ink);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The design switches layout at 940px (its `wide` flag). */
+.desktopOnly {
+  display: none;
+}
+
+@media (min-width: 940px) {
+  .desktopOnly {
+    display: flex;
+  }
+
+  .mobileOnly {
+    display: none !important;
   }
 }
