@@ -234,10 +234,35 @@
   border-left: 2px solid var(--brass-lo);
 }
 
-.submit {
+/*
+  Off-screen rather than display:none or hidden — the better scrapers skip
+  anything obviously hidden, and fill anything that looks like a real field.
+*/
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Email primary, WhatsApp alongside it. Stacks on narrow cards. */
+.send {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
   margin-top: 4px;
-  background: var(--ink);
-  color: var(--bone);
+}
+
+@media (min-width: 560px) {
+  .send {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+}
+
+.submit,
+.submitWhatsApp {
   border: 0;
   border-radius: 999px;
   min-height: 58px;
@@ -253,6 +278,11 @@
   transition: background 0.2s ease;
 }
 
+.submit {
+  background: var(--ink);
+  color: var(--bone);
+}
+
 .submit:hover:not(:disabled) {
   background: var(--ink-2);
 }
@@ -260,6 +290,16 @@
 .submit:disabled {
   opacity: 0.7;
   cursor: progress;
+}
+
+.submitWhatsApp {
+  background: #1fa855;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.submitWhatsApp:hover {
+  background: #178b45;
 }
 
 .error {
@@ -323,6 +363,49 @@
   line-height: 1.65;
   margin: 10px 0 0;
   color: var(--muted);
+}
+
+.thanksActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.another {
+  font-family: var(--body);
+  border: 0;
+  cursor: pointer;
+  background: var(--ink);
+  color: var(--bone);
+  border-radius: 999px;
+  min-height: 52px;
+  padding: 0 24px;
+  font-weight: 700;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow);
+  transition: background 0.2s ease;
+}
+
+.another:hover {
+  background: var(--ink-2);
+}
+
+.thanksCall {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  text-decoration: none;
 }
 
 /* Aside ------------------------------------------------------------ */

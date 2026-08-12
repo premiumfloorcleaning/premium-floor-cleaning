@@ -1,14 +1,26 @@
-.back {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
   color: var(--muted);
-  margin-bottom: 24px;
+  margin-bottom: 26px;
 }
 
-.back:hover {
+.crumbs a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.crumbs a:hover {
   color: var(--brass);
+}
+
+.crumbs [aria-current] {
+  color: var(--text);
+  font-weight: 600;
 }
 
 .head {
@@ -33,12 +45,112 @@
   color: var(--muted);
 }
 
-/* Service-area pills, so every service page states its coverage up front. */
+/*
+  Service-area pills. Links, not labels — they carry internal link equity to the
+  five region pages and give a visitor a one-tap route to their own area.
+*/
 .areas {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 22px;
+}
+
+.areaTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.areaTag:hover {
+  background: var(--ink);
+  color: var(--bone);
+}
+
+/* Body copy + the included-work panel. */
+.detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(22px, 3vw, 40px);
+  align-items: start;
+}
+
+@media (min-width: 940px) {
+  .detail {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+}
+
+.copyTitle {
+  font-size: clamp(24px, 2.8vw, 34px);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  margin-bottom: 18px;
+  max-width: 26ch;
+}
+
+.paragraph {
+  font-size: 16.5px;
+  line-height: 1.72;
+  margin: 0 0 18px;
+  max-width: 68ch;
+  color: var(--muted);
+}
+
+.paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.includes {
+  background: var(--paper);
+  border-radius: var(--r);
+  padding: clamp(22px, 2.4vw, 30px);
+  box-shadow: var(--shadow);
+}
+
+.includesTitle {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+.includesList {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.includesItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.includesIcon {
+  color: var(--brass);
+  flex: none;
+  margin-top: 5px;
+}
+
+.aka {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
 }
 
 .actions {

@@ -1,6 +1,15 @@
-import { ArrowRight, Pin } from "./Icons";
+import Link from "next/link";
+import CoverageMap from "./CoverageMap";
+import { ArrowRight, Check, Pin } from "./Icons";
 import { serviceAreas, waAreaLink } from "@/lib/site";
 import styles from "./Areas.module.css";
+
+/** Claims already made elsewhere on the site — restated here as the coverage promise. */
+const PROMISES = [
+  "Free on-site quote in every region",
+  "Same fixed pricing, wherever you are",
+  "7 days a week, weekends included",
+];
 
 export default function Areas() {
   return (
@@ -17,37 +26,66 @@ export default function Areas() {
       </div>
 
       <div className={styles.grid}>
-        {serviceAreas.map((area) => (
-          <div key={area.name} className={styles.card}>
-            <div className={styles.cardHead}>
-              <span className={`iconDot ${styles.cardIcon}`}>
-                <Pin size={17} />
-              </span>
-              <h3 className={styles.cardTitle}>{area.name}</h3>
-              {area.note ? (
-                <span className={styles.note}>{area.note}</span>
-              ) : null}
-            </div>
-            <p className={styles.suburbs}>
-              {area.suburbs.join(" · ")} and surrounding suburbs
-            </p>
-          </div>
-        ))}
-      </div>
+        <CoverageMap />
 
-      <p className={styles.footnote}>
-        Not sure if your suburb is in range?{" "}
-        <a
-          href={waAreaLink}
-          target="_blank"
-          rel="noopener"
-          className={styles.footnoteLink}
-        >
-          Send it to us on WhatsApp
-          <ArrowRight size={14} />
-        </a>{" "}
-        and we’ll confirm before you book.
-      </p>
+        {/*
+          Unordered: the embedded map carries one marker, not five numbered pins,
+          so numbering these rows would imply a correspondence that isn't there.
+        */}
+        <div className={styles.body}>
+          <ul className={styles.list}>
+            {serviceAreas.map((area) => (
+              <li key={area.slug}>
+                {/*
+                  The whole row is the link to the region's page — that page is
+                  what ranks for "<service> <region>" searches, so every route to
+                  it counts.
+                */}
+                <Link href={`/areas/${area.slug}`} className={styles.item}>
+                  <span className={styles.pin} aria-hidden="true">
+                    <Pin size={15} />
+                  </span>
+                  <div className={styles.itemBody}>
+                    <h3 className={styles.itemTitle}>
+                      {area.name}
+                      {area.note ? (
+                        <span className={styles.note}>{area.note}</span>
+                      ) : null}
+                    </h3>
+                    <p className={styles.suburbs}>
+                      {area.suburbs.join(" · ")} and surrounding suburbs
+                    </p>
+                  </div>
+                  <ArrowRight size={16} className={styles.itemArrow} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className={styles.promises}>
+            {PROMISES.map((promise) => (
+              <span key={promise} className={styles.promise}>
+                <Check size={14} className={styles.promiseIcon} />
+                {promise}
+              </span>
+            ))}
+          </div>
+
+          <p className={styles.footnote}>
+            Not sure if your suburb is in range?{" "}
+            <a
+              href={waAreaLink}
+              target="_blank"
+              rel="noopener"
+              className={styles.footnoteLink}
+            >
+              Send it to us on WhatsApp
+              <ArrowRight size={14} />
+            </a>{" "}
+            and we’ll confirm before you book.
+          </p>
+        </div>
+      </div>
     </section>
   );
 }

@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Manrope } from "next/font/google";
-import { site } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { SOCIAL_CARD_SIZE } from "@/lib/media";
+import {
+  businessNode,
+  defaultSocialCard,
+  graph,
+  websiteNode,
+} from "@/lib/seo";
+import { serviceAreaSentence, site } from "@/lib/site";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -15,24 +23,65 @@ const body = Manrope({
   display: "swap",
 });
 
+const TITLE =
+  "Cleaning Services Brisbane, Gold Coast, Ipswich, Logan & Sunshine Coast";
+const DESCRIPTION = `Carpet, tile and grout, floor scrubbing, pressure washing, window cleaning and graffiti removal across ${serviceAreaSentence}. Free on-site quote, fixed price before we start. Open 7 days, 7am–9pm.`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default:
-      "Floor, Carpet & Pressure Cleaning | Brisbane, Gold Coast, Ipswich, Logan & Sunshine Coast",
-    template: `%s | ${site.name}`,
+    default: TITLE,
+    template: `%s | ${site.shortName}`,
   },
-  description:
-    "Deep cleaning for the floors, carpets, tiles, driveways and windows that everyday cleaning can’t fix. Free on-site quote, fixed price before we start. Brisbane, Gold Coast, Ipswich, Logan and Sunshine Coast, 7 days.",
+  description: DESCRIPTION,
+  applicationName: site.name,
+  // Root canonical. Every route sets its own; without this the home page has none.
+  alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_AU",
+    url: site.url,
     siteName: site.name,
-    title:
-      "Floor, Carpet & Pressure Cleaning | Brisbane, Gold Coast, Ipswich, Logan & Sunshine Coast",
-    description:
-      "Floor scrubbing, tile and grout, carpet steam cleaning, pressure washing, windows and graffiti removal across Brisbane, the Gold Coast, Ipswich, Logan and the Sunshine Coast.",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [
+      {
+        url: defaultSocialCard,
+        ...SOCIAL_CARD_SIZE,
+        alt: "Restored timber floorboards with a clean, reflective finish",
+      },
+    ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [defaultSocialCard],
+  },
+  /*
+    Signals that matter for local search specifically: they let Google, Apple
+    Maps and Bing tie the pages to a physical place rather than inferring it.
+  */
+  other: {
+    "geo.region": `${site.address.country}-${site.address.region}`,
+    "geo.placename": site.address.locality,
+    "geo.position": `${site.geo.lat};${site.geo.lon}`,
+    ICBM: `${site.geo.lat}, ${site.geo.lon}`,
+  },
+  formatDetection: { telephone: true, address: true },
+  // Add the Search Console token here once the property is verified:
+  // verification: { google: "<token>" },
 };
 
 export default function RootLayout({
@@ -40,7 +89,18 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-AU" className={`${display.variable} ${body.variable}`}>
-      <body>{children}</body>
+      <body>
+        {/*
+          No manual <head>: the root layout should not define one. React hoists
+          these link tags into the document head on its own, and JSON-LD is read
+          by search engines wherever it sits in the document.
+        */}
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        {/* One business + website description, shared by every page. */}
+        <JsonLd data={graph([businessNode, websiteNode])} />
+        {children}
+      </body>
     </html>
   );
 }

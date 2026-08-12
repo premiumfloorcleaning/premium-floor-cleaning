@@ -1,6 +1,5 @@
 import Link from "next/link";
 import ImageSlot from "./ImageSlot";
-import { ArrowRight } from "./Icons";
 import { services } from "@/lib/site";
 import styles from "./Services.module.css";
 

@@ -17,23 +17,18 @@
   isolation: isolate;
 }
 
-/* Both states share this box so their text lands on identical pixels. */
-.layer {
+.content {
+  position: relative;
+  z-index: 1;
   padding: clamp(38px, 6vw, 84px) clamp(22px, 4vw, 64px);
 }
 
-.layerClean {
-  position: absolute;
-  inset: 0;
-  background: var(--ink);
-  z-index: 3;
-  /* Multiple radial gradients composite additively by default. */
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-}
-
-.headlineDirty,
-.headlineClean {
+/*
+  Rendered once, always crisp, never duplicated — and with no text-shadow. The
+  previous build glowed the headline to mask the seam between two stacked copies;
+  with a single copy there is no seam, so the type can just be type.
+*/
+.headline {
   font-family: var(--display);
   font-weight: 600;
   font-size: clamp(28px, 4.6vw, 64px);
@@ -41,88 +36,69 @@
   letter-spacing: -0.035em;
   margin: 0;
   max-width: 24ch;
-}
-
-.headlineDirty {
-  color: rgba(148, 160, 176, 0.34);
-  /* Grubby, uneven ink — as if the letters are under a film of dust. */
-  text-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.35),
-    0 0 18px rgba(120, 110, 92, 0.25);
-}
-
-.headlineClean {
   color: var(--bone);
-  text-shadow: 0 1px 24px rgba(207, 226, 247, 0.28);
 }
 
-/* Dust: layered speck fields at different tile sizes so it reads as grit
-   rather than a pattern. Sits above the grimy text, below the clean layer. */
-/*
- * Grime, in three layers rather than a dot pattern (which read as a starfield):
- *   1. fine fractal-noise grit, tiled
- *   2. low-frequency fractal noise for uneven, cloudy soiling
- *   3. faint diagonal streaks, like traffic wear or old mop marks
- * The feColorMatrix in each SVG flattens RGB to a warm dust colour and derives
- * alpha from the noise luminance, so the texture composites over the ink panel
- * instead of sitting on it as a grey block.
- */
-.grit {
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: clamp(24px, 3vw, 38px);
+}
+
+.chip {
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(245, 242, 236, 0.1);
+  border: 1px solid rgba(245, 242, 236, 0.2);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bone);
+}
+
+/* The dust film. Sized in JS to the panel's device pixels. */
+.dust {
   position: absolute;
   inset: 0;
   z-index: 2;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  opacity: 0.8;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.8 0 0 0 0 0.69 0.13 0.13 0.13 0 -0.15'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420'%3E%3Cfilter id='b' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.016 0.022' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.78 0 0 0 0 0.72 0 0 0 0 0.6 0.085 0.085 0.085 0 -0.1'/%3E%3C/filter%3E%3Crect width='640' height='420' filter='url(%23b)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(
-      101deg,
-      rgba(0, 0, 0, 0) 0 30px,
-      rgba(198, 186, 162, 0.022) 30px 36px,
-      rgba(0, 0, 0, 0) 36px 82px
-    );
-  background-size:
-    180px 180px,
-    100% 100%,
-    100% 100%;
-  background-repeat: repeat, no-repeat, repeat;
 }
 
-.sheen {
-  position: absolute;
-  z-index: 4;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0.05),
-    rgba(207, 226, 247, 0.2) 45%,
-    rgba(255, 255, 255, 0.06)
-  );
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-  transition: opacity 0.5s ease;
-}
-
-/* Once the pass is finished the trailing wet glow would otherwise linger. */
-.sheenDone {
-  opacity: 0;
-}
-
-/* The travelling soap + suds head. */
+/* The travelling head. Positioned by transform, so it never triggers layout. */
 .scrubber {
   position: absolute;
-  z-index: 5;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
+  left: 0;
+  top: 0;
+  z-index: 3;
   width: clamp(96px, 12vw, 156px);
   aspect-ratio: 1;
-  transition: opacity 0.4s ease;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.35s ease;
 }
 
-.scrubberDone {
-  opacity: 0;
+/*
+  Wet shine, attached to the head rather than the panel. The old full-panel sheen
+  washed light across the finished copy and read as a glow; this travels with the
+  soap and leaves with it.
+*/
+.wet {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 260%;
+  height: 260%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(207, 226, 247, 0.13),
+    rgba(207, 226, 247, 0.05) 45%,
+    rgba(207, 226, 247, 0) 70%
+  );
 }
 
 .soap {
@@ -172,45 +148,14 @@
   }
 }
 
-/* Chips, in both states. */
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 14px;
-  margin-top: clamp(24px, 3vw, 38px);
-}
-
-.chipDirty,
-.chipClean {
-  padding: 9px 16px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.chipDirty {
-  background: rgba(148, 160, 176, 0.07);
-  border: 1px solid rgba(148, 160, 176, 0.16);
-  color: rgba(196, 205, 216, 0.4);
-}
-
-.chipClean {
-  background: rgba(245, 242, 236, 0.1);
-  border: 1px solid rgba(245, 242, 236, 0.2);
-  color: var(--bone);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .soap,
   .suds {
     animation: none;
   }
 
-  .scrubber {
-    display: none;
-  }
-
-  .grit {
+  .scrubber,
+  .dust {
     display: none;
   }
 }

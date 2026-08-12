@@ -1,0 +1,163 @@
+.panel {
+  background: var(--ink-2);
+  border-radius: var(--r);
+  padding: clamp(12px, 1.4vw, 16px);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/*
+  aspect-ratio is set inline from the projected box, so the tile percentages and
+  the SVG overlay stay in register at every width. Do not add a max-height here:
+  clamping the height without the width would break that registration.
+*/
+.frame {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin-inline: auto;
+  border-radius: calc(var(--r) - 5px);
+  overflow: hidden;
+  background: #0d2542;
+  isolation: isolate;
+}
+
+/* Pull the bright Mapnik palette back so the shading and pins read on top of it.
+   Graded here rather than per-tile, so it is one composited layer. */
+.tiles {
+  position: absolute;
+  inset: 0;
+  filter: saturate(0.62) contrast(1.04) brightness(0.98);
+}
+
+.tile {
+  position: absolute;
+  display: block;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Zero-size anchor sitting on the region's projected point. */
+.marker {
+  position: absolute;
+  width: 0;
+  height: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 999px;
+  background: var(--brass);
+  border: 2.5px solid var(--bone);
+  box-shadow: 0 2px 6px rgba(6, 23, 41, 0.5);
+  transition: transform 0.18s ease;
+}
+
+.label {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: rgba(6, 23, 41, 0.88);
+  color: var(--bone);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: -0.01em;
+  transition: background 0.18s ease;
+}
+
+.markerLeft .label {
+  left: auto;
+  right: 13px;
+}
+
+.marker:hover .dot {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+.marker:hover .label {
+  background: var(--brass);
+  color: #ffffff;
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: rgba(6, 23, 41, 0.88);
+  color: var(--bone);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  padding: 0 4px 2px;
+}
+
+.caption {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(245, 242, 236, 0.5);
+  max-width: 40ch;
+}
+
+.captionLink {
+  color: rgba(245, 242, 236, 0.72);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.captionLink:hover {
+  color: var(--bone);
+}
+
+.expand {
+  flex: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brass-lo);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.expand:hover {
+  color: var(--bone);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot,
+  .marker:hover .dot {
+    transition: none;
+    transform: translate(-50%, -50%);
+  }
+}

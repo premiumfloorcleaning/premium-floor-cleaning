@@ -10,8 +10,15 @@ export default function Hero() {
     <section className={styles.section}>
       <div className={styles.stage}>
         <div className={styles.media}>
+          {/*
+            The poster is what makes Largest Contentful Paint survivable here: a
+            bare <video> has nothing to paint until enough of the file has
+            buffered, and LCP is a ranking signal. The still loads in a fraction
+            of the time and the clip fades in over it.
+          */}
           <ImageSlot
             src={media.video.hero}
+            poster={media.heroPoster}
             label="Hero video — drop a still or a muted, looping 15–20s clip: scrubber passing over a floor, wet shine following it"
             fit="cover"
             tone="dark"

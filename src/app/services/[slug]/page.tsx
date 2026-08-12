@@ -2,25 +2,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ImageSlot from "@/components/ImageSlot";
+import JsonLd from "@/components/JsonLd";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import StickyActions from "@/components/StickyActions";
-import { ArrowRight, Phone, WhatsApp } from "@/components/Icons";
+import { ArrowRight, Check, Phone, Pin, WhatsApp } from "@/components/Icons";
+import { SOCIAL_CARD_SIZE, socialCard } from "@/lib/media";
 import {
-  serviceAreas,
+  breadcrumbNode,
+  graph,
+  serviceNode,
+  webPageNode,
+} from "@/lib/seo";
+import {
   serviceAreaSentence,
+  serviceAreas,
   services,
   site,
   waQuoteLink,
 } from "@/lib/site";
 import styles from "./page.module.css";
-
-/**
- * Destination for the home page's service cards. The Claude Design project has
- * a separate "Service Pages" file — until that is imported, this renders the
- * service's own copy from the home page plus the standard contact actions, so
- * no card links into a dead end.
- */
 
 type Params = { slug: string };
 
@@ -36,9 +37,29 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = services.find((item) => item.slug === slug);
   if (!service) return {};
+
+  const path = `/services/${service.slug}`;
+  const card = socialCard(service.imagePath);
+
   return {
-    title: service.title,
-    description: `${service.blurb} Available across ${serviceAreaSentence}.`,
+    // Absolute, so the long location-bearing title is not squeezed by the
+    // site-wide template. This is the string that competes in the result list.
+    title: { absolute: service.metaTitle },
+    description: service.metaDescription,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "article",
+      url: path,
+      title: service.metaTitle,
+      description: service.metaDescription,
+      images: [{ url: card, ...SOCIAL_CARD_SIZE, alt: service.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: service.metaTitle,
+      description: service.metaDescription,
+      images: [card],
+    },
   };
 }
 
@@ -52,15 +73,36 @@ export default async function ServicePage({
   if (!service) notFound();
 
   const others = services.filter((item) => item.slug !== slug);
+  const path = `/services/${service.slug}`;
+
+  const structuredData = graph([
+    webPageNode({
+      path,
+      name: service.metaTitle,
+      description: service.metaDescription,
+    }),
+    serviceNode(service),
+    breadcrumbNode([
+      { name: "Home", path: "/" },
+      { name: "Services", path: "/#services" },
+      { name: service.title, path },
+    ]),
+  ]);
 
   return (
     <div id="top">
+      <JsonLd data={structuredData} />
       <SiteHeader />
       <main>
         <section className="container section">
-          <Link href="/#services" className={styles.back}>
-            ← All services
-          </Link>
+          {/* Visible counterpart to the BreadcrumbList in the structured data. */}
+          <nav aria-label="Breadcrumb" className={styles.crumbs}>
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/#services">Services</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{service.title}</span>
+          </nav>
 
           <div className={styles.head}>
             <div>
@@ -69,9 +111,14 @@ export default async function ServicePage({
               <p className={styles.blurb}>{service.blurb}</p>
               <div className={styles.areas}>
                 {serviceAreas.map((area) => (
-                  <span key={area.name} className="tag">
+                  <Link
+                    key={area.slug}
+                    href={`/areas/${area.slug}`}
+                    className={styles.areaTag}
+                  >
+                    <Pin size={13} />
                     {area.name}
-                  </span>
+                  </Link>
                 ))}
               </div>
               <div className={styles.actions}>
@@ -85,8 +132,7 @@ export default async function ServicePage({
                 </a>
               </div>
               <p className={styles.note}>
-                Available across {serviceAreaSentence}. Not sure this is the right
-                fix?{" "}
+                Not sure this is the right fix?{" "}
                 <a href={waQuoteLink} target="_blank" rel="noopener">
                   Send a photo on WhatsApp
                 </a>{" "}
@@ -97,12 +143,46 @@ export default async function ServicePage({
             <div className={styles.media}>
               <ImageSlot
                 src={service.image}
-                alt={service.title}
+                alt={`${service.title} — finished result`}
                 label={service.imageLabel}
                 priority
                 sizes="(min-width: 940px) 50vw, 100vw"
               />
             </div>
+          </div>
+        </section>
+
+        <section className="container section">
+          <div className={styles.detail}>
+            <div className={styles.copy}>
+              <h2 className={styles.copyTitle}>
+                What {service.title.toLowerCase()} actually involves
+              </h2>
+              {service.body.map((paragraph) => (
+                <p key={paragraph.slice(0, 40)} className={styles.paragraph}>
+                  {paragraph}
+                </p>
+              ))}
+              <p className={styles.paragraph}>
+                Available across {serviceAreaSentence}, seven days a week,{" "}
+                {site.hoursShort}.
+              </p>
+            </div>
+
+            <aside className={styles.includes}>
+              <h2 className={styles.includesTitle}>What’s included</h2>
+              <ul className={styles.includesList}>
+                {service.includes.map((item) => (
+                  <li key={item} className={styles.includesItem}>
+                    <Check size={14} className={styles.includesIcon} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className={styles.aka}>
+                Also searched as: {service.alsoKnownAs.join(", ")}.
+              </p>
+            </aside>
           </div>
         </section>
 

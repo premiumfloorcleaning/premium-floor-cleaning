@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   Check,
@@ -10,6 +10,7 @@ import {
   Pin,
   WhatsApp,
 } from "./Icons";
+import { quoteAsWhatsAppText, toQuote } from "@/lib/quote";
 import {
   OTHER_SERVICE,
   serviceAreas,
@@ -18,6 +19,7 @@ import {
   site,
   timingChoices,
   waQuoteLink,
+  whatsAppLink,
 } from "@/lib/site";
 import styles from "./Contact.module.css";
 
@@ -25,40 +27,90 @@ type Status = "idle" | "sending" | "sent" | "error";
 
 const DEFAULT_SERVICE = serviceChoices[0];
 const DEFAULT_TIMING = "Either";
+const GENERIC_ERROR = "That didn’t go through.";
 
 export default function Contact() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<Status>("idle");
+  const [errorMessage, setErrorMessage] = useState(GENERIC_ERROR);
   const [service, setService] = useState(DEFAULT_SERVICE);
   const [customService, setCustomService] = useState("");
   const [timing, setTiming] = useState(DEFAULT_TIMING);
 
   const wantsCustom = service === OTHER_SERVICE;
 
+  /** "Something else" is a prompt, not an answer — send what they typed. */
+  function resolvedService() {
+    return wantsCustom ? customService.trim() || OTHER_SERVICE : service;
+  }
+
+  function readForm(form: HTMLFormElement) {
+    return toQuote({
+      ...Object.fromEntries(new FormData(form).entries()),
+      service: resolvedService(),
+      timing,
+    });
+  }
+
+  function resetForm(form: HTMLFormElement) {
+    form.reset();
+    // The chips are controlled, so reset() alone leaves them where they were.
+    setService(DEFAULT_SERVICE);
+    setCustomService("");
+    setTiming(DEFAULT_TIMING);
+  }
+
+  /**
+   * Hands the enquiry to WhatsApp on the visitor's own device, pre-filled. This
+   * costs nothing and needs no API: their WhatsApp sends it to us. Built inside
+   * the click handler so it runs on a real user gesture and the popup blocker
+   * leaves it alone — an await before window.open would get it blocked.
+   */
+  function handleWhatsApp() {
+    const form = formRef.current;
+    if (!form) return;
+
+    // Let the browser's own required-field messages do the work.
+    if (!form.reportValidity()) return;
+
+    const quote = readForm(form);
+    window.open(
+      whatsAppLink(quoteAsWhatsAppText(quote)),
+      "_blank",
+      "noopener,noreferrer",
+    );
+    setStatus("sent");
+    resetForm(form);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
-
-    // "Something else" is a prompt, not an answer — send what they typed.
-    const resolvedService = wantsCustom
-      ? customService.trim() || OTHER_SERVICE
-      : service;
+    const quote = readForm(form);
+    const botField = new FormData(form).get("botField");
 
     setStatus("sending");
     try {
       const response = await fetch("/api/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, service: resolvedService, timing }),
+        body: JSON.stringify({ ...quote, botField }),
       });
-      if (!response.ok) throw new Error("Request failed");
+
+      if (!response.ok) {
+        // Surface what the server actually said; fall back to one generic line.
+        const body = await response.json().catch(() => null);
+        setErrorMessage(
+          typeof body?.error === "string" ? body.error : GENERIC_ERROR,
+        );
+        setStatus("error");
+        return;
+      }
+
       setStatus("sent");
-      form.reset();
-      // The chips are controlled, so reset() alone leaves them where they were.
-      setService(DEFAULT_SERVICE);
-      setCustomService("");
-      setTiming(DEFAULT_TIMING);
+      resetForm(form);
     } catch {
+      setErrorMessage(GENERIC_ERROR);
       setStatus("error");
     }
   }
@@ -83,13 +135,30 @@ export default function Contact() {
               </span>
               <h3 className={styles.thanksTitle}>Thanks — we’ve got it.</h3>
               <p className={styles.thanksBody}>
-                We usually reply in under 10 minutes during opening hours. To talk
-                right now, call{" "}
-                <a href={site.phone.href} className={styles.inlineLink}>
+                We usually reply in under 10 minutes during opening hours. If you
+                would rather talk it through now, give us a call.
+              </p>
+
+              {/*
+                A way back to a blank form — for the second property, or the job
+                they forgot to mention. Without it the only route back is a page
+                reload. The fields were already cleared on success, so dropping to
+                "idle" remounts the form empty.
+              */}
+              <div className={styles.thanksActions}>
+                <button
+                  type="button"
+                  onClick={() => setStatus("idle")}
+                  className={styles.another}
+                >
+                  <Clipboard size={17} />
+                  Add another enquiry
+                </button>
+                <a href={site.phone.href} className={styles.thanksCall}>
+                  <Phone size={16} />
                   {site.phone.display}
                 </a>
-                .
-              </p>
+              </div>
             </div>
           ) : (
             <>
@@ -106,7 +175,20 @@ export default function Contact() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className={styles.form}>
+              <form ref={formRef} onSubmit={handleSubmit} className={styles.form}>
+                {/*
+                  Honeypot: invisible to people, irresistible to bots that fill
+                  every input. Positioned off-screen rather than display:none,
+                  which the better scrapers check for.
+                */}
+                <input
+                  type="text"
+                  name="botField"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className={styles.honeypot}
+                />
                 <div className={styles.pair}>
                   <label className={styles.field}>
                     <span className={styles.label}>
@@ -236,22 +318,39 @@ export default function Contact() {
                   />
                 </label>
 
-                <button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className={styles.submit}
-                >
-                  {status === "sending" ? "Sending…" : "Request my free quote"}
-                  <ArrowRight size={17} />
-                </button>
+                {/*
+                  Two ways to send the same details. Email goes through our
+                  server; WhatsApp opens on the visitor's phone with everything
+                  already written out, so it costs nothing and cannot silently
+                  fail on our side.
+                */}
+                <div className={styles.send}>
+                  <button
+                    type="submit"
+                    disabled={status === "sending"}
+                    className={styles.submit}
+                  >
+                    {status === "sending" ? "Sending…" : "Request my free quote"}
+                    <ArrowRight size={17} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleWhatsApp}
+                    className={styles.submitWhatsApp}
+                  >
+                    <WhatsApp size={19} />
+                    Send on WhatsApp
+                  </button>
+                </div>
 
                 {status === "error" ? (
                   <p role="alert" className={styles.error}>
-                    That didn’t go through. Please call{" "}
+                    {errorMessage} Please call{" "}
                     <a href={site.phone.href} className={styles.inlineLink}>
                       {site.phone.display}
-                    </a>{" "}
-                    or message us on WhatsApp.
+                    </a>
+                    , or use <strong>Send on WhatsApp</strong> above — that opens
+                    on your phone with these details already filled in.
                   </p>
                 ) : null}
 

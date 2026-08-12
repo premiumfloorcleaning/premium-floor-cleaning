@@ -12,49 +12,29 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import StickyActions from "@/components/StickyActions";
 import Ticker from "@/components/Ticker";
-import { faqs, serviceAreas, site } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { faqNode, graph, webPageNode } from "@/lib/seo";
+import { serviceAreaSentence } from "@/lib/site";
 
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
-  name: site.name,
-  telephone: site.phone.e164,
-  email: site.email,
-  url: site.url,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: site.address.street,
-    addressLocality: site.address.locality,
-    addressRegion: site.address.region,
-    postalCode: site.address.postcode,
-    addressCountry: site.address.country,
-  },
-  areaServed: serviceAreas.map((area) => ({
-    "@type": "City",
-    name: area.name,
-    address: {
-      "@type": "PostalAddress",
-      addressRegion: "QLD",
-      addressCountry: "AU",
-    },
-  })),
-  openingHours: "Mo-Su 07:00-21:00",
-  sameAs: [site.social.facebook, site.social.instagram],
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.q,
-    acceptedAnswer: { "@type": "Answer", text: faq.a },
-  })),
-};
+/*
+  The business and website nodes are emitted once in the root layout. This page
+  adds only what is specific to it: the page itself and its FAQ block. The FAQs
+  used to hang off the LocalBusiness node as `mainEntity`, which is not a shape
+  Google recognises for FAQ rich results — they need their own FAQPage node.
+*/
+const structuredData = graph([
+  webPageNode({
+    path: "/",
+    name: "Cleaning Services Brisbane, Gold Coast, Ipswich, Logan & Sunshine Coast",
+    description: `Carpet, tile and grout, floor scrubbing, pressure washing, window cleaning and graffiti removal across ${serviceAreaSentence}.`,
+  }),
+  faqNode,
+]);
 
 export default function Home() {
   return (
     <div id="top">
-      <script
-        type="application/ld+json"
-        // Static, build-time content — no user input reaches this string.
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
       <SiteHeader />
       <main>
         <Hero />

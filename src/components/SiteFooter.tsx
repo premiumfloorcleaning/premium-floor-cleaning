@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Instagram } from "./Icons";
 import { media } from "@/lib/media";
-import { serviceAreas, services, site } from "@/lib/site";
+import { serviceAreaList, serviceAreas, services, site } from "@/lib/site";
 import styles from "./SiteFooter.module.css";
 
 const companyLinks = [
@@ -47,7 +47,11 @@ export default function SiteFooter() {
             <p className={styles.areasLabel}>Areas we cover</p>
             <div className={styles.areas}>
               {serviceAreas.map((area) => (
-                <Link key={area.name} href="/#areas" className={styles.areaLink}>
+                <Link
+                  key={area.slug}
+                  href={`/areas/${area.slug}`}
+                  className={styles.areaLink}
+                >
                   {area.name}
                 </Link>
               ))}
@@ -103,6 +107,7 @@ export default function SiteFooter() {
 
         <div className={styles.legal}>
           <span>© 2026 {site.name}. All rights reserved.</span>
+          <span>{serviceAreaList}</span>
           {/* Social moved down here so no column runs taller than the rest. */}
           <div className={styles.social}>
             <a

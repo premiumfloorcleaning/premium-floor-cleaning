@@ -20,65 +20,149 @@
   max-width: 38ch;
 }
 
-/*
-  Five cards, so an auto-fit grid would leave a lone orphan on wide screens.
-  The minmax floor keeps 2 per row on tablets and 3 on desktop, with the last
-  row of two stretching to fill — deliberate, not a gap.
-*/
+/* Map left, regions right. The map is the narrower track — it is the reference,
+   not the content. Below 940px the map sits above the list. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: clamp(14px, 1.8vw, 22px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 2.6vw, 32px);
   margin-top: clamp(30px, 4vw, 48px);
+  align-items: start;
 }
 
-.card {
+@media (min-width: 940px) {
+  .grid {
+    grid-template-columns: minmax(0, 0.66fr) minmax(0, 1fr);
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2vw, 24px);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
   background: var(--paper);
-  border-radius: var(--r);
-  padding: 24px 24px 26px;
+  border-radius: var(--r-sm);
+  padding: 16px 18px;
   box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.cardHead {
+.item:hover {
+  color: inherit;
+  transform: translateX(3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.itemArrow {
+  margin-left: auto;
+  align-self: center;
+  flex: none;
+  color: var(--brass);
+  transition: transform 0.2s ease;
+}
+
+.item:hover .itemArrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .item:hover,
+  .item:hover .itemArrow {
+    transform: none;
+  }
+}
+
+.pin {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--mint);
+  color: var(--bronze);
+}
+
+/* Brisbane is the base, so its marker reads as the anchor of the set. */
+.item:first-child .pin {
+  background: var(--ink);
+  color: var(--bone);
+}
+
+.itemBody {
+  min-width: 0;
+}
+
+.itemTitle {
   display: flex;
   align-items: center;
-  gap: 12px;
   flex-wrap: wrap;
-}
-
-.cardIcon {
-  width: 38px;
-  height: 38px;
-}
-
-.cardTitle {
-  font-size: 22px;
-  line-height: 1.15;
+  gap: 10px;
+  font-size: 19px;
+  line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
 .note {
-  padding: 5px 11px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: var(--mint);
   color: var(--bronze);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .suburbs {
-  font-size: 15px;
-  line-height: 1.65;
-  margin: 14px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 6px 0 0;
   color: var(--muted);
 }
 
+.promises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+}
+
+.promise {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.promiseIcon {
+  color: var(--brass);
+  flex: none;
+}
+
 .footnote {
-  font-size: 15.5px;
+  font-size: 15px;
   line-height: 1.65;
-  margin: clamp(20px, 2.5vw, 28px) 0 0;
+  margin: 0;
   color: var(--muted);
 }
 
