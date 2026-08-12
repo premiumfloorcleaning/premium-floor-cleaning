@@ -192,13 +192,26 @@ export default function ScrubBand() {
   const scrubberRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const panel = panelRef.current;
-    const canvas = canvasRef.current;
+    const panelEl = panelRef.current;
+    const canvasEl = canvasRef.current;
     const scrubber = scrubberRef.current;
-    if (!panel || !canvas) return;
+    if (!panelEl || !canvasEl) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const context = canvasEl.getContext("2d");
+    if (!context) return;
+
+    /*
+      Re-bound with explicitly non-nullable types.
+
+      The helpers below are hoisted function declarations, and TypeScript will not
+      carry a null-check narrowing into those — it has to assume they could be
+      called before the check ran. Annotating these makes the non-null type the
+      declared one, so no narrowing needs to travel into the closures. `scrubber`
+      is not re-bound because place() null-checks it in its own body.
+    */
+    const panel: HTMLDivElement = panelEl;
+    const canvas: HTMLCanvasElement = canvasEl;
+    const ctx: CanvasRenderingContext2D = context;
 
     /*
       Everything below runs on refs and direct style writes rather than React
