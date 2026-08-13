@@ -24,7 +24,7 @@ export default function SiteHeader() {
             className={styles.badge}
           />
           <span>
-            <span className={styles.brandName}>{site.shortName}</span>
+            <span className={styles.brandName}>{site.name}</span>
             <span className={styles.brandKicker}>{site.kicker}</span>
           </span>
         </Link>

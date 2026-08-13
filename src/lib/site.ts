@@ -9,9 +9,16 @@
 import { cloudinaryPaths, media } from "./media";
 
 export const site = {
+  /*
+    There is deliberately no `shortName`. It held "Premium Floor Cleaning", which
+    is what the header wordmark, the title template and the schema's
+    alternateName all rendered — so three of the most visible places on the site
+    dropped the "Services" off the business's actual name. Everything now reads
+    from `name`. If a genuinely shorter trading name is ever needed, add it back
+    as its own field rather than re-pointing these at a truncation.
+  */
   name: "Premium Floor Cleaning Services",
-  shortName: "Premium Floor Cleaning",
-  kicker: "South East QLD · Est. 2014",
+  kicker: "South East QLD · Open 7 days",
   url: "https://premiumfloorcleaning.com",
   phone: {
     display: "0435 211 512",
@@ -48,6 +55,27 @@ export const site = {
     coverageLarge: "https://www.openstreetmap.org/#map=9/-27.30/153.10",
   },
 } as const;
+
+/**
+ * The Google Business Profile rating, exactly as the profile itself shows it.
+ *
+ * Both numbers have to match the live profile, and `url` has to point at it. A
+ * rating a visitor cannot go and check is worth less than no rating at all, and
+ * an inflated one is misleading conduct under Australian Consumer Law — this is
+ * the field that replaced the unsubstantiated "98% satisfaction / 5.0 Google
+ * rating" stat block the site used to carry.
+ *
+ * Two reviews were verified at the time of writing, both five star, both for
+ * office floor work. Raise `count` as more come in. Dropping the profile URL into
+ * `url` turns the card's "Read them" link on; until then the card renders without
+ * it. Typed rather than `as const` so an empty `url` stays a plain string and the
+ * conditional below it does not narrow to unreachable.
+ */
+export const googleRating: { value: string; count: number; url: string } = {
+  value: "5.0",
+  count: 2,
+  url: "",
+};
 
 /**
  * Business WhatsApp — every wa.me link on the site is built from this.
@@ -227,6 +255,14 @@ export const serviceAreaList = serviceAreas
 export type Service = {
   slug: string;
   title: string;
+  /**
+   * Optional keyword-bearing H1, for the pages competing on a term where the
+   * short title alone is not enough — "Strip & Seal" says nothing about floors
+   * or about Queensland, and H1 is the strongest on-page signal there is. Left
+   * unset, the page falls back to `title`, which is right for the services
+   * where the name already contains the search term.
+   */
+  h1?: string;
   blurb: string;
   /** Pull from `media` in lib/media.ts. Unset renders the dashed placeholder. */
   image?: string;
@@ -421,6 +457,71 @@ export const services: Service[] = [
     ],
   },
   {
+    slug: "strip-and-seal",
+    title: "Strip & Seal",
+    h1: "Strip & seal floor restoration across South East QLD",
+    blurb:
+      "Spent coatings and years of build-up taken back to the bare floor, then sealed again from scratch.",
+    image: media.services.stripAndSeal,
+    imagePath: cloudinaryPaths.stripAndSeal,
+    imageLabel: "Strip & seal",
+    metaTitle: "Strip & Seal Brisbane | Floor Stripping & Sealing SE QLD",
+    metaDescription:
+      "Strip and seal for vinyl, VCT, lino and sealed concrete. Old coatings stripped back, fresh sealer applied, scheduled after hours. Free on-site assessment.",
+    body: [
+      "What looks like a worn-out floor is usually a worn-out finish. Sealer is sacrificial — it is there to take the traffic so the vinyl or concrete underneath does not — and once it has been walked through, scuffed and polished thin, mopping cannot bring it back, because the layer you are cleaning has already gone. Stripping takes the spent coating off entirely and starts again on the bare floor.",
+      "It suits the floors that were built to carry a coating: vinyl and VCT, lino, sealed concrete and some sealed tile. It is not the answer to everything. Unsealed timber wants sanding, not stripping, and a floor that is gouged, cupped or delaminating will still be gouged, cupped and delaminating under a fresh coat of sealer. We tell you which of those you have at the assessment, not after the invoice.",
+      "The part worth knowing before you book is the timeline. Stripper needs dwell time, the floor has to be neutralised and properly dry before sealer goes anywhere near it, and every coat has to cure before the next one goes on — commonly three to five coats, depending on the floor and the traffic it carries. Rushing any of that is what produces the milky, peeling finish you see in tired shopping-centre corridors. You get a realistic window from us, and the earliest hour the floor can take foot traffic again.",
+      "Most of this work is commercial and most of it happens when the site is shut. We schedule overnight, at weekends and through shutdown periods for offices, medical centres, childcare, schools, retail, warehouses and strata common areas — and where an area cannot be closed off in one go, we work it in sections.",
+    ],
+    includes: [
+      "Floor type and existing coating identified before anything goes down",
+      "Test section stripped first, so you see the bare floor before we commit",
+      "Skirtings, door frames, drains and fixtures masked and protected",
+      "Spent coating extracted, then the floor neutralised and moisture-checked",
+      "Three to five coats of sealer, cured between coats, matte or gloss",
+      "Walk-through on completion, plus the earliest safe time back on the floor",
+    ],
+    process: [
+      {
+        title: "Assessment",
+        body: "We identify the floor, the coating on it, and what condition it is really in.",
+      },
+      {
+        title: "Area prepared",
+        body: "Fittings moved, skirtings and drains masked, the area closed off.",
+      },
+      {
+        title: "Strip",
+        body: "Stripper goes down, gets its dwell time, then the old coating comes off.",
+      },
+      {
+        title: "Deep clean",
+        body: "The bare floor is scrubbed, the slurry extracted, the surface neutralised.",
+      },
+      {
+        title: "Dry and check",
+        body: "We moisture-check it. Sealer over a damp floor is what goes milky.",
+      },
+      {
+        title: "Seal",
+        body: "Three to five coats, each one cured before the next goes on.",
+      },
+      {
+        title: "Final inspection",
+        body: "We walk it with you and say when it can take foot traffic again.",
+      },
+    ],
+    alsoKnownAs: [
+      "floor stripping and sealing",
+      "vinyl floor sealing",
+      "VCT stripping",
+      "strip and wax",
+      "lino sealing",
+      "commercial floor restoration",
+    ],
+  },
+  {
     slug: "pressure-wash",
     title: "Pressure Wash",
     blurb:
@@ -584,10 +685,136 @@ export const services: Service[] = [
   },
 ];
 
+/* ------------------------------------------------------------------
+   Commercial — the /commercial hub page.
+
+   Kept as data rather than written into the page, for the same reason the
+   services are: the sector list feeds the visible cards and the page's
+   OfferCatalog in the structured data, and those two must not drift apart.
+   ------------------------------------------------------------------ */
+
+export type CommercialSector = {
+  name: string;
+  /**
+   * Which glyph the card carries. A key rather than the component itself,
+   * because this file is .ts and cannot hold JSX — the commercial page maps these
+   * onto the icons in components/Icons.tsx.
+   */
+  icon:
+    | "office"
+    | "medical"
+    | "school"
+    | "retail"
+    | "warehouse"
+    | "hospitality"
+    | "gym"
+    | "strata"
+    | "keys";
+  /** What the floors in this kind of building are actually up against. */
+  body: string;
+  /** The site constraint that decides how the work has to be scheduled. */
+  constraint: string;
+};
+
+/**
+ * Ordered roughly by how much of this work we do. Each entry has to say
+ * something true about that sector specifically — a list of nine cards that all
+ * say "professional floor cleaning for your business" ranks for nothing and
+ * tells a facility manager nothing.
+ */
+export const commercialSectors: CommercialSector[] = [
+  {
+    name: "Offices",
+    icon: "office",
+    body: "Reception areas and lift lobbies take the first impression and the most grit off the street. Corridors wear in traffic lanes down the middle while the edges stay clean, which is what makes an office floor look patchy rather than dirty.",
+    constraint: "Cleaned after close or overnight, so no desk loses a working day.",
+  },
+  {
+    name: "Medical centres",
+    icon: "medical",
+    body: "Waiting rooms, corridors and treatment areas are almost all vinyl or sheet vinyl, chosen so it can be sealed and wiped down. Once that seal wears through, the floor stops being cleanable and starts holding everything that lands on it.",
+    constraint: "Strip and seal between clinic days, with the floor back in use before opening.",
+  },
+  {
+    name: "Schools & childcare",
+    icon: "school",
+    body: "Hard floors in classrooms, halls, corridors and wet areas take a level of traffic no home floor sees, concentrated into short bursts. Childcare rooms need the finish intact, because a worn seal is a floor that cannot be properly sanitised.",
+    constraint: "Scheduled into term breaks, pupil-free days and school holidays.",
+  },
+  {
+    name: "Retail & shopping centres",
+    icon: "retail",
+    body: "Customer-facing floors are judged constantly and never closed. Entrances carry the water and grit in, and tenancy floors are usually vinyl or tile that has been polished thin by trolley and foot traffic.",
+    constraint: "Worked in sections or after trading, so the floor is never closed off entirely.",
+  },
+  {
+    name: "Warehouses & industrial",
+    icon: "warehouse",
+    body: "Concrete slabs collect oil, rubber from forklift tyres, and a grey film that mopping only spreads. Line marking and loading-dock aprons take the worst of it, and an unsealed slab keeps releasing dust until it is dealt with.",
+    constraint: "Machine scrubbed and acid washed around shift patterns and stock movements.",
+  },
+  {
+    name: "Restaurants & hospitality",
+    icon: "hospitality",
+    body: "Kitchen floors and the grout around them absorb grease that goes hard and holds odour. Front-of-house tile shows every mark under low lighting, and non-slip surfaces trap exactly what makes them non-slip.",
+    constraint: "Cleaned between service or overnight, kitchen ready for the morning.",
+  },
+  {
+    name: "Gyms & fitness",
+    icon: "gym",
+    body: "Rubber matting, changing rooms and wet areas hold sweat and the smell that comes with it, and neither responds to surface cleaning. Studio and reception hard floors take the grit that walks in from the car park.",
+    constraint: "Done in off-peak windows or overnight for 24-hour sites.",
+  },
+  {
+    name: "Strata & body corporate",
+    icon: "strata",
+    body: "Lobbies, corridors, stairwells, car parks and pool surrounds are the floors every owner sees and nobody is individually responsible for. On the coast they also carry a salt film that ordinary cleaning smears rather than lifts.",
+    constraint: "Quoted per building with a photo record for the committee's minutes.",
+  },
+  {
+    name: "Property managers",
+    icon: "keys",
+    body: "Vacancies, end-of-lease cleans and pre-inspection work run to somebody else's deadline. What you generally need is not just a clean floor but written evidence of one, before the tenant disputes the bond.",
+    constraint: "Booked to the inspection date, with before-and-after photos on completion.",
+  },
+];
+
+/**
+ * Property types we are asked to attend for managing agents and committees.
+ * Separate from the sector card above because this is a scannable list rather
+ * than prose — a property manager is scanning for their own situation.
+ */
+export const managedPropertyTypes = [
+  "Residential investment properties",
+  "Body corporate and strata common areas",
+  "Commercial tenancies between leases",
+  "Vacant properties before listing",
+  "End-of-lease and bond cleans",
+  "Pre-inspection presentation",
+  "Building entrances, lobbies and pathways",
+  "Car parks and stairwells",
+];
+
+/**
+ * What we can genuinely put in writing for a commercial client.
+ *
+ * Read this list before adding to it. Insurance documentation is deliberately
+ * absent — see the note where the "Are you insured?" FAQ used to be. Nothing
+ * goes on this list that cannot be produced on the day it is asked for.
+ */
+export const commercialDocumentation = [
+  "A written scope of work and fixed price before we start",
+  "Product and safety data sheets for anything used on your site",
+  "Before-and-after photo records for reporting and sign-off",
+  "Site induction and sign-in completed to your building's requirements",
+  "Invoicing on account, so repeat call-outs do not need a new order each time",
+];
+
 export const tickerItems = [
   "Carpet steam cleaning",
   "Tile & grout restoration",
   "Driveway pressure washing",
+  "Strip & seal",
   "Floor scrubbing & acid wash",
   "Window cleaning",
   "Graffiti removal",
@@ -695,15 +922,19 @@ export const faqs = [
   },
   {
     q: "What floor cleaning services do you offer?",
-    a: "Tile and grout cleaning, carpet cleaning, hardwood and vinyl floor cleaning, stone floor cleaning, floor sealing and floor restoration — for homes and commercial properties, across Brisbane, the Gold Coast, Ipswich, Logan and the Sunshine Coast.",
+    a: "Strip and seal, tile and grout cleaning, carpet cleaning, machine floor scrubbing and acid washing, pressure washing, window cleaning and graffiti removal — on vinyl, VCT, lino, tile, concrete, stone and timber, for homes and commercial properties across Brisbane, the Gold Coast, Ipswich, Logan and the Sunshine Coast.",
+  },
+  {
+    q: "Do you provide strip and seal?",
+    a: "Yes, and it is the work we are called out for most on the commercial side. We strip and seal vinyl, VCT, lino, sealed concrete and some sealed tile, after an assessment of the floor and the coating already on it. Most of it is scheduled overnight, at weekends or through a shutdown period, so the site is not out of use during trading hours.",
   },
   {
     q: "How often should floors be professionally cleaned?",
     a: "It depends on foot traffic, pets, children and the flooring type. Most homes benefit from a professional clean every 6–12 months; commercial properties usually need it more often.",
   },
   {
-    q: "Is it safe for children and pets?",
-    a: "Yes. Wherever possible we use professional-grade, environmentally responsible products, and our methods are designed to be safe for families, children, pets and employees.",
+    q: "We have children and pets — what should we tell you?",
+    a: "Tell us at the quote. There is almost always more than one way to do a job, so if there are children, pets, or anyone with asthma or allergies in the property, we will pick the products and the method around that. We ventilate as we work, and we tell you how long to stay off the floor before the room goes back into use.",
   },
   {
     q: "How long does it take to dry?",
@@ -711,7 +942,7 @@ export const faqs = [
   },
   {
     q: "Do you clean commercial properties?",
-    a: "Yes — offices, retail, medical facilities, schools, restaurants, hotels and industrial premises across Brisbane, the Gold Coast, Ipswich, Logan and the Sunshine Coast.",
+    a: "Yes, and it is most of what we do. Offices, medical centres, schools and childcare, retail, warehouses and industrial sites, restaurants, gyms, and strata common areas across Brisbane, the Gold Coast, Ipswich, Logan and the Sunshine Coast. Most of it is scheduled overnight, at weekends or through a shutdown so the site is not out of use during trading hours, and you get a written scope and a photo record of the work.",
   },
   {
     q: "What are the benefits of professional floor cleaning?",
@@ -729,10 +960,14 @@ export const faqs = [
     q: "Do you move the furniture?",
     a: "We move what two people can safely move and put protective blocks under the legs while the floor dries. We do not move pianos, full display cabinets, beds with storage bases, or anything electrical still connected. If a room needs to be cleared, tell us at the quote and we will factor it in.",
   },
-  {
-    q: "Are you insured?",
-    a: "Yes, we carry public liability insurance. If your body corporate, property manager or building manager needs a certificate of currency before we can access the property, ask and we will send it through.",
-  },
+  /*
+    An "Are you insured?" entry sat here claiming public liability cover and an
+    available certificate of currency. The owner has confirmed that is not
+    current, so it is gone rather than softened — a hedged answer on insurance
+    still reads as a yes. Put it back, worded plainly, once there is a policy to
+    point at: body corporates and facility managers ask for the certificate
+    before they will grant site access, so this is a live sales blocker.
+  */
   {
     q: "Do you work weekends and after hours?",
     a: "Yes — seven days, 7:00am to 9:00pm, weekends included at no extra charge. Commercial work is often easier after hours or overnight, and we schedule it that way where it suits the site.",
@@ -757,6 +992,7 @@ export const serviceChoices = [
   "Carpet cleaning",
   "Tile & grout",
   "Floor scrubbing",
+  "Strip & seal",
   "Pressure wash",
   "Windows",
   "Graffiti removal",
@@ -766,9 +1002,31 @@ export const serviceChoices = [
 
 export const timingChoices = ["Weekdays", "Weekends", "Either"];
 
-/** Root-relative so the shared header works from the service pages too. */
+/**
+ * The four pages the hero points at, under its buttons.
+ *
+ * Editorial, not the full service list: these are the terms the site is trying to
+ * win, so they are the ones worth a link from the highest-authority block on the
+ * highest-authority page. Kept here rather than hardcoded into Hero.tsx so the
+ * hrefs sit beside the slugs they refer to.
+ */
+export const heroHighlights = [
+  { href: "/services/strip-and-seal", label: "Strip & seal" },
+  { href: "/commercial", label: "Commercial floors" },
+  { href: "/services/tile-cleaning-grout-removal", label: "Tile & grout" },
+  { href: "/services/floor-scrubbing-acid-washing", label: "Floor scrubbing" },
+];
+
+/**
+ * Root-relative so the shared header works from the service pages too.
+ *
+ * "Commercial" is the one real route in here rather than a home-page anchor —
+ * it sits second because commercial work is what the site is being pointed at,
+ * and a facility manager should not have to hunt for it behind five anchors.
+ */
 export const navLinks = [
   { href: "/#services", label: "Services" },
+  { href: "/commercial", label: "Commercial" },
   { href: "/#results", label: "Results" },
   { href: "/#areas", label: "Areas" },
   { href: "/#about", label: "About" },

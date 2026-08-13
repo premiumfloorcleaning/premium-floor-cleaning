@@ -35,13 +35,19 @@ const body = Manrope({
 */
 const TITLE =
   "Premium Floor Cleaning Services | Brisbane, Gold Coast & SE QLD";
-const DESCRIPTION = `Carpet, tile and grout, floor scrubbing, pressure washing, window cleaning and graffiti removal across ${serviceAreaSentence}. Free on-site quote, fixed price before we start. Open 7 days, 7am–9pm.`;
+/*
+  Strip and seal leads, because it is the term with the most commercial intent
+  behind it. The previous version ran past 230 characters, so everything from
+  "Free on-site quote" onwards was cut out of the snippet before anyone saw it —
+  this one is close enough to 160 that the call to action survives.
+*/
+const DESCRIPTION = `Strip and seal, tile and grout, carpet, floor scrubbing and pressure washing across ${serviceAreaSentence}. Free on-site quote.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: TITLE,
-    template: `%s | ${site.shortName}`,
+    template: `%s | ${site.name}`,
   },
   description: DESCRIPTION,
   applicationName: site.name,

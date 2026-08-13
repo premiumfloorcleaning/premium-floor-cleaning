@@ -1,6 +1,7 @@
 import About from "@/components/About";
 import Areas from "@/components/Areas";
 import BeforeAfter from "@/components/BeforeAfter";
+import CommercialBand from "@/components/CommercialBand";
 import Contact from "@/components/Contact";
 import CtaBanner from "@/components/CtaBanner";
 import Faq from "@/components/Faq";
@@ -26,7 +27,7 @@ const structuredData = graph([
   webPageNode({
     path: "/",
     name: "Premium Floor Cleaning Services | Brisbane, Gold Coast & SE QLD",
-    description: `Carpet, tile and grout, floor scrubbing, pressure washing, window cleaning and graffiti removal across ${serviceAreaSentence}.`,
+    description: `Strip and seal, carpet, tile and grout, floor scrubbing, pressure washing, window cleaning and graffiti removal across ${serviceAreaSentence}.`,
   }),
   faqNode,
 ]);
@@ -40,6 +41,12 @@ export default function Home() {
         <Hero />
         <Ticker />
         <Services />
+        {/*
+          Directly after the services grid: the visitor has just seen what we do,
+          and this answers who we do it for. It is also the only route from the
+          home page into /commercial.
+        */}
+        <CommercialBand />
         <BeforeAfter />
         <HowItWorks />
         <ScrubBand />

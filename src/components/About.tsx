@@ -1,10 +1,27 @@
+import Link from "next/link";
 import ImageSlot from "./ImageSlot";
+import { ArrowRight } from "./Icons";
+import {
+  serviceAreaSentence,
+  serviceAreas,
+  services,
+  site,
+} from "@/lib/site";
 import styles from "./About.module.css";
 
+/*
+  Every figure here has to be checkable against something else on the site. The
+  previous three — 98% satisfaction, 10+ years, a 5.0 Google rating — were none
+  of them substantiated, and an unsupported performance claim is the business's
+  exposure under Australian Consumer Law, not the website's.
+
+  These are counted from the same arrays the pages are built from, so adding a
+  region or a service updates the figure instead of leaving it to go stale.
+*/
 const stats = [
-  { value: "98%", label: "Satisfaction rate" },
-  { value: "10+", label: "Years of experience" },
-  { value: "5.0", label: "Google rating" },
+  { value: String(serviceAreas.length), label: "Regions covered" },
+  { value: String(services.length), label: "Specialist services" },
+  { value: "7 days", label: "Open, weekends included" },
 ];
 
 export default function About() {
@@ -15,16 +32,25 @@ export default function About() {
           <div>
             <span className="eyebrow eyebrowOnDark">About us</span>
             <h2 className={`sectionTitle ${styles.title}`}>
-              A local team that turns up and finishes properly
+              We don’t just clean floors. We restore them.
             </h2>
             <p className={styles.copy}>
-              Premium Floor Cleaning Services provides professional cleaning for
-              homes, offices, commercial buildings, warehouses and industrial
-              facilities across Brisbane, the Gold Coast, Ipswich, Logan and the
-              Sunshine Coast. Our team uses advanced equipment and proven methods,
-              and we use green, biodegradable products that are safe around
-              children and pets.
+              Premium Floor Cleaning Services works on floors for offices, medical
+              centres, schools, warehouses, strata common areas and homes across{" "}
+              {serviceAreaSentence}. Most of what we are called out for is a floor
+              somebody assumed needed replacing — stripped back, resealed and
+              handed over looking like the floor it was meant to be.
             </p>
+            <p className={styles.copy}>
+              We match the machine, the pad and the chemical to the floor in front
+              of us rather than running one process over every surface. If a
+              treatment will not get you the result you are picturing, we say so at
+              the quote instead of after the invoice.
+            </p>
+            <Link href="/commercial" className={styles.commercialLink}>
+              See our commercial work
+              <ArrowRight size={15} className={styles.commercialArrow} />
+            </Link>
             <div className={styles.stats}>
               {stats.map((stat) => (
                 <div key={stat.label}>
@@ -45,15 +71,15 @@ export default function About() {
             </div>
             <div className={styles.notes}>
               <div className={styles.note}>
-                <h4 className={styles.noteTitle}>Green products</h4>
+                <h4 className={styles.noteTitle}>Matched to your floor</h4>
                 <p className={styles.noteBody}>
-                  Biodegradable, safe around children, pets and staff.
+                  Tested on a hidden section before the whole floor is committed.
                 </p>
               </div>
               <div className={styles.note}>
                 <h4 className={styles.noteTitle}>Fast replies</h4>
                 <p className={styles.noteBody}>
-                  Under 10 minutes on average, 7am to 9pm.
+                  {site.replyTime} on average · {site.hoursShort}
                 </p>
               </div>
             </div>

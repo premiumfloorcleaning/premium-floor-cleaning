@@ -18,7 +18,7 @@ const HEADLINE = "Bright grout. Fresh carpet. Even concrete. Clear glass.";
 const FEATURES = [
   "Machine scrub, not a mop",
   "Extracted, not left to dry",
-  "Green, biodegradable products",
+  "Test patch before we commit",
   "Dry in about 4–8 hours",
 ];
 
@@ -408,7 +408,7 @@ export default function ScrubBand() {
       <div className={styles.inner}>
         <span className="eyebrow">Watch the difference</span>
         <h2 className={`sectionTitle ${styles.title}`}>
-          One pass is all it takes
+          See what a machine scrub actually lifts
         </h2>
 
         <div className={styles.panel} ref={panelRef}>

@@ -10,7 +10,14 @@ export default function Services() {
       <div className={styles.head}>
         <div>
           <span className="eyebrow">Our services</span>
-          <h2 className={styles.title}>Six ways we make a property feel new</h2>
+          {/*
+            Was "Six ways we make a property feel new", which went stale the
+            moment a seventh service was added and carried none of the terms this
+            section is trying to rank for. Count-free and keyword-bearing.
+          */}
+          <h2 className={styles.title}>
+            Specialist floor cleaning &amp; restoration
+          </h2>
         </div>
         <p className={`lede ${styles.headNote}`}>
           Not sure what you need? Send a photo on WhatsApp and we’ll tell you the

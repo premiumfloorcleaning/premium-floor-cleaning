@@ -20,6 +20,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
+    /*
+      The commercial hub, at the same weight as a service page. It is hand-listed
+      because it is a single fixed route rather than one of a generated set — if a
+      second hub ever joins it, give them an array of their own rather than
+      letting this list grow entry by entry.
+    */
+    {
+      url: absolute("/commercial"),
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    },
     ...services.map((service) => ({
       url: absolute(`/services/${service.slug}`),
       lastModified: now,

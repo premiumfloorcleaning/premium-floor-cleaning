@@ -45,7 +45,9 @@ export const businessNode = {
   "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
   "@id": BUSINESS_ID,
   name: site.name,
-  alternateName: site.shortName,
+  // No alternateName: the only one we had was the full name with "Services"
+  // trimmed off, and declaring a truncation as a second trading name is worse
+  // than declaring nothing. Add one here if the business genuinely has one.
   url: site.url,
   telephone: site.phone.e164,
   email: site.email,
@@ -89,7 +91,7 @@ export const businessNode = {
   ],
   logo: absolute(media.brand.logoBadge),
   sameAs: [site.social.facebook, site.social.instagram],
-  // The six services, so Google can associate the business with each of them.
+  // Every service, so Google can associate the business with each of them.
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Cleaning services",

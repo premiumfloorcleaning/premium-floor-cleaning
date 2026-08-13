@@ -1,0 +1,158 @@
+/*
+  A mint panel rather than another white card or a fourth ink panel. The home page
+  already alternates white sections against the dark hero, CTA banner and About
+  block; a tinted band reads as a distinct step in the page without adding a third
+  dark stretch above the fold-and-a-half.
+*/
+
+.panel {
+  background: var(--mint);
+  border-radius: clamp(18px, 2.4vw, 32px);
+  box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+}
+
+@media (min-width: 940px) {
+  .panel {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+}
+
+/*
+  Photo first in the DOM so it leads on a phone, where the image is what stops the
+  scroll. On desktop it stays in column one, which is where the eye starts anyway.
+*/
+.media {
+  padding: clamp(20px, 3vw, 34px);
+  padding-bottom: 0;
+}
+
+@media (min-width: 940px) {
+  .media {
+    padding: clamp(24px, 2.6vw, 40px);
+  }
+}
+
+/*
+  The collage is portrait (1312×1648), so the frame carries its 4/5 ratio at every
+  width — a wide banner crop would cut off most of the panels it is composed of.
+  Capped on phones so a tall image cannot take over the whole screen.
+*/
+.mediaFrame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-width: 340px;
+  margin: 0 auto;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--brass-lo);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 940px) {
+  .mediaFrame {
+    max-width: none;
+  }
+}
+
+.body {
+  padding: clamp(26px, 3.4vw, 48px);
+}
+
+.title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(26px, 3.4vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin: 16px 0 0;
+  max-width: 22ch;
+}
+
+.copy {
+  font-size: 16.5px;
+  line-height: 1.7;
+  margin: 18px 0 0;
+  max-width: 54ch;
+  color: var(--muted);
+}
+
+/*
+  A grid, not wrapped pills. The sector names run from "Offices" to "Retail &
+  shopping centres", and wrapped pills of wildly different widths leave a ragged
+  block; fixed tracks line the glyphs up into columns instead.
+*/
+.sectors {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 172px), 1fr));
+  gap: 9px;
+  margin: clamp(22px, 3vw, 28px) 0 0;
+  padding: 0;
+}
+
+.sector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--paper);
+  border: 1px solid rgba(16, 27, 41, 0.07);
+  border-radius: 12px;
+  padding: 10px 13px;
+  font-size: 13.5px;
+  line-height: 1.35;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sectorGlyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 9px;
+  background: var(--mint);
+  color: var(--bronze);
+}
+
+/* Scheduling note and the button share a row on wide screens and stack below it,
+   separated from the sector grid by a rule so the block does not read as one
+   undifferentiated column of text. */
+.foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+  margin-top: clamp(22px, 3vw, 28px);
+  padding-top: clamp(20px, 2.6vw, 26px);
+  border-top: 1px solid rgba(16, 27, 41, 0.1);
+}
+
+@media (min-width: 1100px) {
+  .foot {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 28px;
+  }
+}
+
+.scheduling {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  font-weight: 600;
+  margin: 0;
+  max-width: 44ch;
+  color: var(--bronze);
+}
+
+.schedulingIcon {
+  flex: none;
+  margin-top: 4px;
+  color: var(--brass);
+}

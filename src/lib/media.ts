@@ -56,6 +56,7 @@ export const media = {
 
   /** One per service card, reused on that service's own page. */
   services: {
+    stripAndSeal: image("v1786629014/strip_seal.png"),
     floorScrubbing: image("v1786529699/floor_scrubing.png"),
     tileCleaning: image("v1786529693/tile_cleaning.png"),
     carpetCleaning: image("v1786529704/carpet_cleaning.png"),
@@ -90,6 +91,17 @@ export const media = {
     ipswich: image("v1786543775/Ipswich.png"),
     logan: image("v1786543775/Logan.png"),
     sunshineCoast: image("v1786543775/sunshine-coast.png"),
+  },
+
+  commercial: {
+    /** The /commercial hub hero. An office floor mid-clean, not a showroom. */
+    hero: image("v1786629840/worn_office_floor_cleaning.webp"),
+    /**
+     * Home-page commercial band. A portrait collage (1312×1648) — the band's
+     * media column is deliberately tall to suit it, so do not swap this for a
+     * landscape shot without revisiting CommercialBand.module.css.
+     */
+    collage: image("v1786630724/commercial_floor_collage.webp"),
   },
 
   /** Transparent-background cut-out for the mid-page CTA panel. */
@@ -127,6 +139,7 @@ export const media = {
 export const cloudinaryPaths = {
   /** Default share card for the site: the most recognisable finished result. */
   social: "v1786529700/polished_honey_wood_floor.webp",
+  stripAndSeal: "v1786629014/strip_seal.png",
   floorScrubbing: "v1786529699/floor_scrubing.png",
   tileCleaning: "v1786529693/tile_cleaning.png",
   carpetCleaning: "v1786529704/carpet_cleaning.png",
@@ -134,6 +147,7 @@ export const cloudinaryPaths = {
   windowCleaning: "v1786529693/window_cleaning.png",
   graffitiRemoval: "v1786530011/graffiti_removal.png",
   glossyHallway: "v1786529696/glossy_hallway_reflection.webp",
+  commercialHero: "v1786629840/worn_office_floor_cleaning.webp",
   cleanDriveway: "v1786529691/clean_driveway_pressure_washed.webp",
   /* Region shots, so each area page can build a share card of its own city. */
   brisbane: "v1786543776/Brisbane.png",

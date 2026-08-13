@@ -25,6 +25,20 @@ import styles from "./page.module.css";
 
 type Params = { slug: string };
 
+/**
+ * Spelled-out counts read better than numerals in a sentence. Only the lengths a
+ * `process` list realistically runs to are listed; anything else falls back to
+ * the numeral, which is plainer but never wrong.
+ */
+const STEP_COUNT_WORDS: Record<number, string> = {
+  3: "Three",
+  4: "Four",
+  5: "Five",
+  6: "Six",
+  7: "Seven",
+  8: "Eight",
+};
+
 export function generateStaticParams(): Params[] {
   return services.map((service) => ({ slug: service.slug }));
 }
@@ -107,7 +121,7 @@ export default async function ServicePage({
           <div className={styles.head}>
             <div>
               <span className="eyebrow">Our services</span>
-              <h1 className={styles.title}>{service.title}</h1>
+              <h1 className={styles.title}>{service.h1 ?? service.title}</h1>
               <p className={styles.blurb}>{service.blurb}</p>
               <div className={styles.areas}>
                 {serviceAreas.map((area) => (
@@ -187,10 +201,14 @@ export default async function ServicePage({
         </section>
 
         {/*
-          What actually happens on the day, in five steps. The checklist above
-          says what you get; this says the order it happens in, which is the part
-          a quote cannot show anyone in advance. Deliberately plain — a customer
-          reading this is deciding whether to call, not comparing methods.
+          What actually happens on the day. The checklist above says what you
+          get; this says the order it happens in, which is the part a quote cannot
+          show anyone in advance. Deliberately plain — a customer reading this is
+          deciding whether to call, not comparing methods.
+
+          The count is read off the array rather than written into the sentence:
+          most services run to five steps, but strip & seal genuinely takes seven
+          and the copy used to say "Five steps" regardless.
         */}
         <section className="container section">
           <span className="eyebrow">How the job runs</span>
@@ -198,7 +216,8 @@ export default async function ServicePage({
             What happens on the day
           </h2>
           <p className={styles.processNote}>
-            Five steps, start to finish. Same either way — home or commercial.
+            {STEP_COUNT_WORDS[service.process.length] ?? service.process.length}{" "}
+            steps, start to finish. Same either way — home or commercial.
           </p>
 
           <ol className={styles.processGrid}>

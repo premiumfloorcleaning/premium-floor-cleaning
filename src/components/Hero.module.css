@@ -69,13 +69,19 @@
   display: block;
 }
 
+/*
+  Wider measure and a lower ceiling than the old headline needed. "Floors that
+  look brand new again" was five short words and set happily at 88px/15ch; the
+  current one is nearly fifty characters, and at those numbers it broke into four
+  cramped lines with "East QLD" alone on the last.
+*/
 .title {
-  font-size: clamp(40px, 6.6vw, 88px);
-  line-height: 0.98;
+  font-size: clamp(37px, 5.6vw, 74px);
+  line-height: 1;
   letter-spacing: -0.035em;
   color: var(--bone);
   margin: 22px 0 0;
-  max-width: 15ch;
+  max-width: 18ch;
 }
 
 .blurb {
@@ -136,22 +142,100 @@
   }
 }
 
+/* Positioning links under the CTAs — glass pills, so they read as secondary to
+   the two buttons above them rather than competing with them. */
+.highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: clamp(18px, 3vw, 24px);
+}
+
+.highlight {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(245, 242, 236, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(245, 242, 236, 0.22);
+  color: var(--bone);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.18s ease;
+}
+
+.highlight:hover {
+  background: rgba(245, 242, 236, 0.24);
+  color: var(--bone);
+}
+
 .trustRow {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.stars {
-  display: flex;
-  gap: 3px;
-  color: var(--brass);
+/*
+  Google's own rating surfaces are white cards, so this one is too — it also means
+  the block does not read as more frosted glass belonging to the site. Sitting on
+  a dark hero, white is the strongest thing available, which suits the one piece
+  of third-party proof on the page.
+*/
+.googleCard {
+  background: var(--paper);
+  border-radius: var(--r-sm);
+  padding: 14px 16px 13px;
+  box-shadow: var(--shadow);
 }
 
-.trustStrong {
-  color: var(--bone);
+.googleTop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.googleBrand {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+
+.googleScore {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 9px;
+}
+
+.googleValue {
+  font-family: var(--display);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+/* Google's review stars are amber, not the site's brass. Hardcoded rather than
+   tokenised: it belongs to Google's mark, not to this palette. */
+.googleStars {
+  display: flex;
+  gap: 2px;
+  color: #fbbc04;
+}
+
+.googleCount {
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 7px 0 0;
+  color: var(--muted);
+}
+
+.googleLink {
+  font-weight: 600;
+  color: var(--brass);
 }
 
 .trustBadge {

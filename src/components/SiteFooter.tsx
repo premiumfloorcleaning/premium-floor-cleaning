@@ -7,6 +7,7 @@ import styles from "./SiteFooter.module.css";
 
 const companyLinks = [
   { href: "/", label: "Home" },
+  { href: "/commercial", label: "Commercial" },
   { href: "/#about", label: "About us" },
   { href: "/#results", label: "Our results" },
   { href: "/#areas", label: "Areas we cover" },
@@ -35,9 +36,9 @@ export default function SiteFooter() {
               </span>
             </div>
             <p className={styles.about}>
-              Professional floor scrubbing, acid washing, carpet cleaning, tile
-              and grout cleaning, pressure washing, window cleaning and graffiti
-              removal.
+              Commercial and residential floor cleaning and restoration. Strip and
+              seal, floor scrubbing and acid washing, tile and grout, carpet,
+              pressure washing, windows and graffiti removal.
             </p>
             {/*
               Areas sit here as an inline row rather than a fifth column — five
