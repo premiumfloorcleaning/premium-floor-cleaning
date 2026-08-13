@@ -193,15 +193,20 @@ export default function CommercialPage() {
               </dl>
             </div>
 
+            {/* Framed rather than bled to the panel edge, matching the home
+                page's commercial band — a collage has its own internal edges, and
+                running it into the corner fights them. */}
             <div className={styles.heroMedia}>
-              <ImageSlot
-                src={media.commercial.hero}
-                alt="A worn office floor being machine cleaned"
-                label="Commercial floor cleaning"
-                tone="dark"
-                priority
-                sizes="(min-width: 940px) 45vw, 100vw"
-              />
+              <div className={styles.heroMediaFrame}>
+                <ImageSlot
+                  src={media.commercial.collage}
+                  alt="Commercial floor cleaning jobs: office, corridor and warehouse floors"
+                  label="Commercial floor cleaning"
+                  tone="dark"
+                  priority
+                  sizes="(min-width: 940px) 42vw, 90vw"
+                />
+              </div>
             </div>
           </div>
         </section>

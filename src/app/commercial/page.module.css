@@ -45,6 +45,8 @@
   box-shadow: var(--shadow-lg);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  /* Centres the framed photo against the taller copy column beside it. */
+  align-items: center;
 }
 
 /*
@@ -62,17 +64,41 @@
   padding: clamp(26px, 3.4vw, 52px);
 }
 
+/*
+  Photo above the copy on a phone, beside it on a desktop.
+
+  It carries the same portrait collage as the home page's commercial band
+  (1312×1648), so it gets the same treatment: a 4/5 frame at every width rather
+  than a short banner crop, because a wide slice through a collage cuts off most
+  of the panels it is composed of.
+*/
 .heroMedia {
-  position: relative;
-  min-height: clamp(240px, 42vw, 300px);
-  background: var(--ink-2);
+  padding: clamp(20px, 3vw, 34px);
+  padding-bottom: 0;
   order: -1;
 }
 
 @media (min-width: 940px) {
   .heroMedia {
-    min-height: 100%;
+    padding: clamp(24px, 2.6vw, 40px);
     order: 0;
+  }
+}
+
+.heroMediaFrame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-width: 330px;
+  margin: 0 auto;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--ink-2);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 940px) {
+  .heroMediaFrame {
+    max-width: none;
   }
 }
 
