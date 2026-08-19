@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ImageSlot from "./ImageSlot";
 import { ArrowRight } from "./Icons";
+import { media } from "@/lib/media";
 import {
   serviceAreaSentence,
   serviceAreas,
@@ -32,7 +33,7 @@ export default function About() {
           <div>
             <span className="eyebrow eyebrowOnDark">About us</span>
             <h2 className={`sectionTitle ${styles.title}`}>
-              We don’t just clean floors. We restore them.
+              We don’t just clean floors. We look after the surface.
             </h2>
             <p className={styles.copy}>
               Premium Floor Cleaning Services works on floors for offices, medical
@@ -64,6 +65,8 @@ export default function About() {
           <div className={styles.media}>
             <div className={styles.photo}>
               <ImageSlot
+                src={media.people.teamAtWork}
+                alt="Two of the Premium Floor Cleaning Services crew machine-scrubbing a floor on site"
                 label="Team at work"
                 tone="dark"
                 sizes="(min-width: 940px) 45vw, 100vw"

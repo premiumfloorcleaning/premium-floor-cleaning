@@ -75,7 +75,7 @@ export const metadata: Metadata = {
       {
         url: defaultSocialCard,
         ...SOCIAL_CARD_SIZE,
-        alt: "Restored timber floorboards with a clean, reflective finish",
+        alt: "Polished timber floorboards with a clean, reflective finish",
       },
     ],
   },

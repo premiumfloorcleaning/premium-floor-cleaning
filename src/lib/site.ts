@@ -247,6 +247,15 @@ export function findServiceArea(slug: string) {
 export const serviceAreaSentence =
   "Brisbane, Gold Coast, Ipswich, Logan and the Sunshine Coast";
 
+/**
+ * How the business describes itself in a single sentence — the footer's opening
+ * line, and the phrase to reuse anywhere else one is needed. Built from
+ * `serviceAreaSentence` rather than typed out, so adding a region does not leave
+ * a second, staler list of areas behind. "Surface care" rather than
+ * "restoration": restoration is not a service we offer.
+ */
+export const tagline = `Commercial and residential floor cleaning and surface care specialists across ${serviceAreaSentence}.`;
+
 /** Dot-separated form — for kickers, footers and other tight spots. */
 export const serviceAreaList = serviceAreas
   .map((area) => area.name)
@@ -351,7 +360,7 @@ export const services: Service[] = [
     slug: "tile-cleaning-grout-removal",
     title: "Tile Cleaning & Grout Removal",
     blurb:
-      "Dark grout lines and stained tiles in kitchens, bathrooms and entryways restored.",
+      "Dark grout lines and stained tiles in kitchens, bathrooms and entryways brought back.",
     image: media.services.tileCleaning,
     imagePath: "v1786529693/tile_cleaning.png",
     imageLabel: "Tile & grout",
@@ -459,7 +468,7 @@ export const services: Service[] = [
   {
     slug: "strip-and-seal",
     title: "Strip & Seal",
-    h1: "Strip & seal floor restoration across South East QLD",
+    h1: "Strip & seal for vinyl, VCT and sealed concrete across South East QLD",
     blurb:
       "Spent coatings and years of build-up taken back to the bare floor, then sealed again from scratch.",
     image: media.services.stripAndSeal,
@@ -518,7 +527,7 @@ export const services: Service[] = [
       "VCT stripping",
       "strip and wax",
       "lino sealing",
-      "commercial floor restoration",
+      "commercial floor stripping",
     ],
   },
   {
@@ -812,7 +821,7 @@ export const commercialDocumentation = [
 
 export const tickerItems = [
   "Carpet steam cleaning",
-  "Tile & grout restoration",
+  "Tile & grout cleaning",
   "Driveway pressure washing",
   "Strip & seal",
   "Floor scrubbing & acid wash",
@@ -891,7 +900,7 @@ export const galleryItems: GalleryItem[] = [
     caption: "Timber floor — cleaned and polished",
     label: "Timber floor job",
     image: media.results.floorboardsAfter,
-    alt: "Restored timber floorboards with a clean, reflective finish",
+    alt: "Polished timber floorboards with a clean, reflective finish",
     beforeImage: media.results.floorboardsBefore,
     beforeAlt:
       "The same timber floor before cleaning, covered in dirt, debris and scuff marks",

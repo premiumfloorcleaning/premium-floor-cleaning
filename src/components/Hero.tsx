@@ -41,16 +41,17 @@ export default function Hero() {
               The old H1 promised floors that "look brand new again", which is a
               result no cleaner can guarantee on a floor they have not seen — some
               wear, etching and staining is permanent. This one keeps the terms
-              people actually search on (floor cleaning, restoration, the region)
-              and drops the promise.
+              people actually search on (floor cleaning, surface care, the region)
+              and drops the promise. "Restoration" is deliberately absent: it is
+              not a service the business offers.
             */}
             <h1 className={styles.title}>
-              Floor cleaning &amp; restoration across South East QLD
+              Floor cleaning &amp; surface care across South East QLD
             </h1>
             <p className={styles.blurb}>
               Commercial and residential floors that everyday cleaning can’t fix —
-              stripped, sealed, scrubbed and restored. Free on-site quote, fixed
-              price before we start.
+              stripped, sealed and scrubbed back to an even finish. Free on-site
+              quote, fixed price before we start.
             </p>
             <div className={styles.ctas}>
               <a href="#contact" className="btn btnLight">

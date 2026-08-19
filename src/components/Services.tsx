@@ -16,7 +16,7 @@ export default function Services() {
             section is trying to rank for. Count-free and keyword-bearing.
           */}
           <h2 className={styles.title}>
-            Specialist floor cleaning &amp; restoration
+            Specialist floor cleaning &amp; surface care
           </h2>
         </div>
         <p className={`lede ${styles.headNote}`}>

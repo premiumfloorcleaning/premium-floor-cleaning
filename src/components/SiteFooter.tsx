@@ -2,7 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Instagram } from "./Icons";
 import { media } from "@/lib/media";
-import { serviceAreaList, serviceAreas, services, site } from "@/lib/site";
+import {
+  serviceAreaList,
+  serviceAreas,
+  services,
+  site,
+  tagline,
+} from "@/lib/site";
 import styles from "./SiteFooter.module.css";
 
 const companyLinks = [
@@ -36,9 +42,8 @@ export default function SiteFooter() {
               </span>
             </div>
             <p className={styles.about}>
-              Commercial and residential floor cleaning and restoration. Strip and
-              seal, floor scrubbing and acid washing, tile and grout, carpet,
-              pressure washing, windows and graffiti removal.
+              {tagline} Strip and seal, floor scrubbing and acid washing, tile
+              and grout, carpet, pressure washing, windows and graffiti removal.
             </p>
             {/*
               Areas sit here as an inline row rather than a fifth column — five

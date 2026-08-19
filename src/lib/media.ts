@@ -104,9 +104,11 @@ export const media = {
     collage: image("v1786630724/commercial_floor_collage.webp"),
   },
 
-  /** Transparent-background cut-out for the mid-page CTA panel. */
   people: {
+    /** Transparent-background cut-out for the mid-page CTA panel. */
     cleaningGirl: image("v1786529697/cleaning_girl.png"),
+    /** The About section's photo — the crew on a job, not a posed studio shot. */
+    teamAtWork: image("v1787116740/team_at_work.png"),
   },
 
   /**
