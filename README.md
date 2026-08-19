@@ -61,7 +61,7 @@ Slots to fill, in page order:
 | `BeforeAfter` | ✅ Pair filled — `image.webp` (before) / `image_1.webp` (after), both 4:3. Still needed: the 4 gallery items below it (the last is a ~20s video). |
 | `ScrubBand` | Transparent-background GIF of a dishwash brush scrubbing with suds. |
 | `CtaBanner` | ✅ Filled — `public/team/cleaning_girl.png`. |
-| `About` | Team-at-work photo. |
+| `About` | ✅ Filled — `team_at_work.png` (`media.people.teamAtWork`). |
 
 ## The quote form
 
